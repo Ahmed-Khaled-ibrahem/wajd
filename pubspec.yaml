@@ -29,8 +29,6 @@ dependencies:
   # Image Handling
   image_picker: ^1.1.2
   image: ^4.2.0
-  # Storage & Caching
-  flutter_secure_storage: ^9.2.2
   # Forms & Validation
   reactive_forms: ^17.0.1
   # Utilities
