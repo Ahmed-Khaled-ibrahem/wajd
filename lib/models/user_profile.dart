@@ -1,85 +1,97 @@
+import 'package:equatable/equatable.dart';
 
+enum UserRole { parent, staff, admin }
 
-class UserProfile {
-  final String userId;
+class AppUser extends Equatable {
+  final String id;
+  final String email;
   final String name;
-  final String phone;
-  final String device;
-  // List<Alert> alerts;
+  final String? phoneNumber;
+  final UserRole role;
+  final String? profileImageUrl;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final Map<String, dynamic>? metadata;
 
-  UserProfile({
-    required this.userId,
+  const AppUser({
+    required this.id,
+    required this.email,
     required this.name,
-    required this.phone,
-    required this.device,
-    // this.alerts = const [],
+    this.phoneNumber,
+    required this.role,
+    this.profileImageUrl,
+    required this.createdAt,
+    this.updatedAt,
+    this.metadata,
   });
 
-  // From JSON
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
-    return UserProfile(
-      userId: json['user_id'] ?? '',
-      name: json['name'] ?? '',
-      phone: json['phone'] ?? '',
-      device: json['device'] ?? '',
-      // alerts:
-      //     (json['alerts'] as List<dynamic>?)
-      //         ?.map((a) => Alert.fromMap(a))
-      //         .toList() ??
-      //     [],
+  factory AppUser.fromJson(Map<String, dynamic> json) {
+    return AppUser(
+      id: json['id'] as String,
+      email: json['email'] as String,
+      name: json['name'] as String,
+      phoneNumber: json['phone_number'] as String?,
+      role: UserRole.values.firstWhere(
+            (role) => role.toString().split('.').last == json['role'],
+        orElse: () => UserRole.parent,
+      ),
+      profileImageUrl: json['profile_image_url'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
+      metadata: json['metadata'] as Map<String, dynamic>?,
     );
   }
 
-  // To JSON
   Map<String, dynamic> toJson() {
     return {
-      'user_id': userId,
+      'id': id,
+      'email': email,
       'name': name,
-      'phone': phone,
-      'device': device,
-      // 'alerts': alerts.map((a) => a.toMap()).toList(),
+      'phone_number': phoneNumber,
+      'role': role.toString().split('.').last,
+      'profile_image_url': profileImageUrl,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
+      'metadata': metadata,
     };
   }
 
-  // From Firestore
-  factory UserProfile.fromFirestore(Map<String, dynamic> data, String id) {
-    return UserProfile(
-      userId: id,
-      name: data['name'] ?? '',
-      phone: data['phone'] ?? '',
-      device: data['device'] ?? '',
-      // alerts:
-      //     (data['alerts'] as List<dynamic>?)
-      //         ?.map((a) => Alert.fromMap(a))
-      //         .toList() ??
-      //     [],
-    );
-  }
-
-  // To Firestore
-  static Map<String, dynamic> toFirestore(UserProfile profile) {
-    return {
-      'user_id': profile.userId,
-      'name': profile.name,
-      'phone': profile.phone,
-      'device': profile.device,
-      // 'alerts': profile.alerts.map((a) => a.toMap()).toList(),
-    };
-  }
-
-  UserProfile copyWith({
-    String? userId,
+  AppUser copyWith({
+    String? id,
+    String? email,
     String? name,
-    String? phone,
-    String? device,
-    // List<Alert>? alerts,
+    String? phoneNumber,
+    UserRole? role,
+    String? profileImageUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    Map<String, dynamic>? metadata,
   }) {
-    return UserProfile(
-      userId: userId ?? this.userId,
+    return AppUser(
+      id: id ?? this.id,
+      email: email ?? this.email,
       name: name ?? this.name,
-      phone: phone ?? this.phone,
-      device: device ?? this.device,
-      // alerts: alerts ?? this.alerts,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      role: role ?? this.role,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      metadata: metadata ?? this.metadata,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    id,
+    email,
+    name,
+    phoneNumber,
+    role,
+    profileImageUrl,
+    createdAt,
+    updatedAt,
+    metadata,
+  ];
 }

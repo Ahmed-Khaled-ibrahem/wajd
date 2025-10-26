@@ -11,18 +11,18 @@ class LocalStorageService {
   static const String _emailKey = 'saved_email';
 
   // Save User Profile
-  Future<void> saveUserProfile(UserProfile profile) async {
+  Future<void> saveUserProfile(AppUser profile) async {
     final prefs = await SharedPreferences.getInstance();
     final json = jsonEncode(profile.toJson());
     await prefs.setString(_userProfileKey, json);
   }
 
   // Get User Profile
-  Future<UserProfile?> getUserProfile() async {
+  Future<AppUser?> getUserProfile() async {
     final prefs = await SharedPreferences.getInstance();
     final json = prefs.getString(_userProfileKey);
     if (json != null) {
-      return UserProfile.fromJson(jsonDecode(json));
+      return AppUser.fromJson(jsonDecode(json));
     }
     return null;
   }

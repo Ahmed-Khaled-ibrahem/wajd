@@ -15,7 +15,7 @@ class AuthLoading extends AuthState {
 }
 
 class AuthAuthenticated extends AuthState {
-  final UserProfile profile;
+  final AppUser profile;
   const AuthAuthenticated(this.profile);
 }
 

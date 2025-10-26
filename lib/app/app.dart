@@ -47,9 +47,9 @@ class App extends ConsumerWidget {
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         scaffoldMessengerKey: rootScaffoldMessengerKey,
-        title: 'TrueLimbs App',
+        title: 'Wajd',
         theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme, // take care
+        darkTheme: AppTheme.lightTheme, // take care
         themeMode: themeMode,
         routerConfig: router,
         locale: context.locale,
