@@ -6,7 +6,9 @@ import '../../features/admin/home/admin_home_screen.dart';
 import '../../features/login/login_screen.dart';
 import '../../features/login/sign_up_screen.dart';
 import '../../features/login/signin_error_screen.dart';
-import '../../features/parent/home/parent_home_Screen.dart';
+import '../../features/parent/home/parent_layout.dart';
+import '../../features/profile/presentation/edit_profile_screen.dart';
+import '../../features/splash/splash_screen.dart';
 import '../../features/staff/home/staff_home_screen.dart';
 import '../wrapper/app_wrapper.dart';
 
@@ -21,7 +23,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: rootKey,
-    initialLocation: '/login',
+    initialLocation: '/splash',
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -33,9 +35,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/error', builder: (context, state) => const SignInErrorScreen()),
           GoRoute(path: '/signup', builder: (context, state) => const SignUpScreen()),
 
+          // Admin routes
           GoRoute(path: '/admin_home', builder: (context, state) => const AdminHomeScreen()),
-          GoRoute(path: '/parent_home', builder: (context, state) => const ParentHomeScreen()),
+          
+          // Parent routes
+          GoRoute(path: '/parent_home', builder: (context, state) => const ParentLayout()),
+          
+          // Staff routes
           GoRoute(path: '/staff_home', builder: (context, state) => const StaffHomeScreen()),
+          
+          // Common routes
+          GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+          GoRoute(path: '/edit-profile', builder: (context, state) => const EditProfileScreen(),
+            pageBuilder: (context, state) => CustomTransitionPage(
+              key: state.pageKey,
+              child: const EditProfileScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
+                var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+                return SlideTransition(position: offsetAnimation, child: child);
+              },
+            ),
+          ),
         ],
       ),
     ],

@@ -1,0 +1,189 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:wajd/app/const/colors.dart';
+import 'package:wajd/features/login/controller/auth_controller.dart';
+import 'package:wajd/features/profile/presentation/edit_profile_screen.dart';
+import 'package:wajd/models/auth_state.dart';
+
+class ProfileScreen extends ConsumerWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Get user info from auth state
+    String userName = 'User';
+    String? imageUrl;
+    String? email;
+
+    if (authState is AuthAuthenticated) {
+      userName = authState.profile.name;
+      imageUrl = authState.profile.profileImageUrl;
+      email = authState.profile.email;
+    }
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Profile'), centerTitle: true),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            Stack(
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isDark ? Colors.white24 : Colors.grey.shade200,
+                      width: 2,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: imageUrl != null
+                        ? CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.person, size: 50),
+                          )
+                        : const Icon(
+                            Icons.person,
+                            size: 50,
+                            color: Colors.grey,
+                          ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      // shape: BoxShape.circle(20),
+                      border: Border.all(
+                        color: isDark ? Colors.black26 : Colors.white,
+                        width: 2,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.camera_alt,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              userName,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            if (email != null) ...{
+              const SizedBox(height: 4),
+              Text(
+                email,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
+              ),
+            },
+            const SizedBox(height: 32),
+            // Profile Options
+            _buildProfileOption(
+              context,
+              icon: Iconsax.profile_2user,
+              title: 'Edit Profile',
+              onTap: () {
+                context.push('/edit-profile');
+              },
+            ),
+            _buildProfileOption(
+              context,
+              icon: Iconsax.message_question,
+              title: 'Help & Support',
+              onTap: () {
+                // Navigate to help & support
+              },
+            ),
+            _buildProfileOption(
+              context,
+              icon: Iconsax.info_circle,
+              title: 'About App',
+              onTap: () {
+                // Show about dialog
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'Wajd',
+                  applicationVersion: '1.0.0',
+                  children: [const Text('A child safety application.')],
+                );
+              },
+            ),
+            const SizedBox(height: 24),
+            // Logout Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // Handle logout
+                  ref.read(authControllerProvider.notifier).signOut();
+                  context.go('/login');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade50,
+                  foregroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: Colors.red.shade200),
+                  ),
+                ),
+                icon: const Icon(Iconsax.logout_1),
+                label: const Text('Logout'),
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileOption(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      onTap: onTap,
+      leading: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.primaryColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: AppColors.primaryColor),
+      ),
+      title: Text(title),
+      trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 16),
+      contentPadding: const EdgeInsets.symmetric(vertical: 4),
+    );
+  }
+}
