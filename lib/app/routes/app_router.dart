@@ -2,14 +2,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:wajd/features/login/loading_screen.dart';
-import '../../features/admin/home/admin_home_screen.dart';
+import '../../features/admin/home/admin_layout.dart';
+import '../../features/admin/staff/staff_management_screen.dart';
 import '../../features/login/login_screen.dart';
 import '../../features/login/sign_up_screen.dart';
 import '../../features/login/signin_error_screen.dart';
+import '../../features/parent/children/add_new_child_screen.dart';
+import '../../features/parent/children/childern_list_screen.dart';
 import '../../features/parent/home/parent_layout.dart';
+import '../../features/parent/report/presentation/report_other_child_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
 import '../../features/splash/splash_screen.dart';
 import '../../features/staff/home/staff_home_screen.dart';
+import '../../features/staff/reports/reports_screen.dart';
 import '../wrapper/app_wrapper.dart';
 
 final _rootNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>(
@@ -36,16 +41,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/signup', builder: (context, state) => const SignUpScreen()),
 
           // Admin routes
-          GoRoute(path: '/admin_home', builder: (context, state) => const AdminHomeScreen()),
+          GoRoute(
+            path: '/admin_home', 
+            builder: (context, state) => const AdminLayout(),
+            routes: [
+              GoRoute(
+                path: 'reports',
+                builder: (context, state) => const ReportsScreen(),
+              ),
+              GoRoute(
+                path: 'staff',
+                builder: (context, state) => const StaffManagementScreen(),
+              ),
+            ],
+          ),
           
           // Parent routes
           GoRoute(path: '/parent_home', builder: (context, state) => const ParentLayout()),
           
           // Staff routes
           GoRoute(path: '/staff_home', builder: (context, state) => const StaffHomeScreen()),
-          
+          GoRoute(path: '/report_other_child', builder: (context, state) => const ReportOtherChildScreen()),
+
           // Common routes
           GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+          GoRoute(path: '/children-list', builder: (context, state) => const ChildrenListScreen()),
+          GoRoute(path: '/add-child', builder: (context, state) => const AddNewChildScreen()),
           GoRoute(path: '/edit-profile', builder: (context, state) => const EditProfileScreen(),
             pageBuilder: (context, state) => CustomTransitionPage(
               key: state.pageKey,

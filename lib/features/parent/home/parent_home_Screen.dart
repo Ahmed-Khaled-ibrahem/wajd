@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wajd/app/const/colors.dart';
 import '../../../models/auth_state.dart';
 import '../../login/controller/auth_controller.dart';
@@ -89,13 +90,8 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
                                     title: const Text('Other Child'),
                                     subtitle: const Text('Report a missing child you found'),
                                     onTap: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const ReportOtherChildScreen(),
-                                        ),
-                                      );
+                                      context.pop(context);
+                                      context.push('/report_other_child');
                                     },
                                   ),
                                 ],
@@ -149,7 +145,9 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.push('/children-list');
+                        },
                         label: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           child: Text(

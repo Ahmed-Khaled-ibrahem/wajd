@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:wajd/app/const/colors.dart';
 import 'package:wajd/features/login/controller/auth_controller.dart';
-import 'package:wajd/features/profile/presentation/edit_profile_screen.dart';
 import 'package:wajd/models/auth_state.dart';
+import 'package:wajd/models/user_profile.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -20,11 +20,13 @@ class ProfileScreen extends ConsumerWidget {
     String userName = 'User';
     String? imageUrl;
     String? email;
+    UserRole role = UserRole.parent;
 
     if (authState is AuthAuthenticated) {
       userName = authState.profile.name;
       imageUrl = authState.profile.profileImageUrl;
       email = authState.profile.email;
+      role = authState.profile.role;
     }
 
     return Scaffold(
@@ -103,7 +105,30 @@ class ProfileScreen extends ConsumerWidget {
                 ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
               ),
             },
+            const SizedBox(height: 2),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(8),
+                  topRight: const Radius.circular(8),
+                  bottomLeft: const Radius.circular(8),
+                  bottomRight: const Radius.circular(8),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  role.name.toUpperCase(),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 32),
+
             // Profile Options
             _buildProfileOption(
               context,
