@@ -38,7 +38,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> with SingleTicker
       body: TabBarView(
         controller: _tabController,
         children: const [
-          Center(child: Text('Active Reports')),
+          Center(child: Text('Active Reportshiuhiu')),
           Center(child: Text('Archived Reports')),
         ],
       ),

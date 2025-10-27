@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wajd/services/supabase_cleint.dart';
 import '../models/user_profile.dart';
 
-
 // Current app user provider
 final currentAppUserProvider = FutureProvider<AppUser?>((ref) async {
   final user = ref.watch(currentUserProvider);

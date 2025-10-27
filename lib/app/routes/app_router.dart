@@ -13,7 +13,7 @@ import '../../features/parent/home/parent_layout.dart';
 import '../../features/parent/report/presentation/report_other_child_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
 import '../../features/splash/splash_screen.dart';
-import '../../features/staff/home/staff_home_screen.dart';
+import '../../features/staff/home/staff_layout.dart';
 import '../../features/staff/reports/reports_screen.dart';
 import '../wrapper/app_wrapper.dart';
 
@@ -46,21 +46,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const AdminLayout(),
             routes: [
               GoRoute(
-                path: 'reports',
-                builder: (context, state) => const ReportsScreen(),
-              ),
-              GoRoute(
                 path: 'staff',
                 builder: (context, state) => const StaffManagementScreen(),
               ),
             ],
+          ),
+          GoRoute(
+            path: '/all-reports',
+            builder: (context, state) => const ReportsScreen(),
           ),
           
           // Parent routes
           GoRoute(path: '/parent_home', builder: (context, state) => const ParentLayout()),
           
           // Staff routes
-          GoRoute(path: '/staff_home', builder: (context, state) => const StaffHomeScreen()),
+          GoRoute(path: '/staff_home', builder: (context, state) => const StaffLayout()),
           GoRoute(path: '/report_other_child', builder: (context, state) => const ReportOtherChildScreen()),
 
           // Common routes

@@ -19,9 +19,6 @@ dependencies:
   flutter_riverpod: ^2.6.1
   easy_localization: ^3.0.8
   toastification: ^3.0.3
-  cloud_firestore: ^6.0.3
-
-
   # Backend
   supabase_flutter: ^2.5.9
   flutter_svg: ^2.0.10
@@ -29,26 +26,11 @@ dependencies:
   # Image Handling
   image_picker: ^1.1.2
   image: ^4.2.0
-  # Forms & Validation
-  reactive_forms: ^17.0.1
   # Utilities
   intl: ^0.20.2
   equatable: ^2.0.5
-  json_annotation: ^4.9.0
-  # Charts & Analytics
-  fl_chart: ^0.68.0
-  # Location Services
   geolocator: ^12.0.0
   geocoding: ^3.0.0
-  # HTTP & Connectivity
-  dio: ^5.4.3
-  connectivity_plus: ^6.0.3
-  # Date & Time
-  timeago: ^3.6.1
-  # Loading & Shimmer
-  shimmer: ^3.0.0
-  # Phone Number
-  phone_number: ^2.1.0
   # File Handling
   file_picker: ^8.0.3
   # Permissions

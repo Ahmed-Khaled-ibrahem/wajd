@@ -46,7 +46,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
                       icon: Icons.report,
                       title: 'Reports',
                       description: 'View and manage all reports',
-                      onTap: () => context.go('/admin_home/reports'),
+                      onTap: () => context.push('/all-reports'),
                     ),
                     const SizedBox(height: 10),
                     _buildActionCard(
