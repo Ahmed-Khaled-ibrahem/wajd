@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wajd/services/supabase_cleint.dart';
@@ -14,9 +16,9 @@ final currentAppUserProvider = FutureProvider<AppUser?>((ref) async {
 
 // User profile state provider
 final userProfileProvider =
-StateNotifierProvider<UserProfileNotifier, AsyncValue<AppUser?>>(
+    StateNotifierProvider<UserProfileNotifier, AsyncValue<AppUser?>>(
       (ref) => UserProfileNotifier(ref),
-);
+    );
 
 class UserProfileNotifier extends StateNotifier<AsyncValue<AppUser?>> {
   final Ref _ref;
@@ -47,10 +49,7 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<AppUser?>> {
   Future<void> updateUserProfile(AppUser user) async {
     state = const AsyncValue.loading();
     try {
-      await _client
-          .from('users')
-          .update(user.toJson())
-          .eq('id', user.id);
+      await _client.from('profiles').update(user.toJson()).eq('id', user.id);
 
       state = AsyncValue.data(user);
     } catch (e, stack) {
@@ -68,12 +67,20 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<AppUser?>> {
     }
   }
 
-  Future<String?> uploadProfileImage(String userId, String imagePath) async {
+  Future<String?> uploadProfileImage(String userId, File image) async {
     try {
       final fileName = 'profile_$userId${DateTime.now().millisecondsSinceEpoch}';
+      print('###');
+      print(fileName);
+      final imageInBytes = await image.readAsBytes();
       final response = await _client.storage
           .from('profile-images')
-          .upload(fileName, imagePath as dynamic);
+          .uploadBinary(fileName, imageInBytes)
+          .catchError((e) {
+            print(e);
+          });
+      print('###');
+      print(response);
 
       if (response.isNotEmpty) {
         final imageUrl = _client.storage
@@ -98,32 +105,29 @@ final staffUsersProvider = FutureProvider<List<AppUser>>((ref) async {
         .inFilter('role', ['staff', 'admin'])
         .order('created_at', ascending: false);
 
-    return (response as List)
-        .map((json) => AppUser.fromJson(json))
-        .toList();
+    return (response as List).map((json) => AppUser.fromJson(json)).toList();
   } catch (e) {
     throw Exception('Failed to fetch staff users: $e');
   }
 });
 
 // Search users provider
-final searchUsersProvider = FutureProvider.family<List<AppUser>, String>(
-      (ref, query) async {
-    if (query.isEmpty) return [];
+final searchUsersProvider = FutureProvider.family<List<AppUser>, String>((
+  ref,
+  query,
+) async {
+  if (query.isEmpty) return [];
 
-    final client = ref.watch(supabaseClientProvider);
-    try {
-      final response = await client
-          .from('users')
-          .select()
-          .or('name.ilike.%$query%,email.ilike.%$query%')
-          .limit(20);
+  final client = ref.watch(supabaseClientProvider);
+  try {
+    final response = await client
+        .from('users')
+        .select()
+        .or('name.ilike.%$query%,email.ilike.%$query%')
+        .limit(20);
 
-      return (response as List)
-          .map((json) => AppUser.fromJson(json))
-          .toList();
-    } catch (e) {
-      throw Exception('Failed to search users: $e');
-    }
-  },
-);
+    return (response as List).map((json) => AppUser.fromJson(json)).toList();
+  } catch (e) {
+    throw Exception('Failed to search users: $e');
+  }
+});

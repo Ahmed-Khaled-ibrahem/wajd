@@ -8,12 +8,15 @@ import 'package:wajd/features/login/controller/auth_controller.dart';
 import 'package:wajd/models/auth_state.dart';
 import 'package:wajd/models/user_profile.dart';
 
+import '../../login/controller/current_profile_provider.dart';
+
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
+    final profile = ref.watch(currentUserProfileProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     String userName = 'User';
@@ -22,10 +25,10 @@ class ProfileScreen extends ConsumerWidget {
     UserRole role = UserRole.parent;
 
     if (authState is AuthAuthenticated) {
-      userName = authState.profile.name;
-      imageUrl = authState.profile.profileImageUrl;
-      email = authState.profile.email;
-      role = authState.profile.role;
+      userName = profile?.name ?? '';
+      imageUrl = profile?.profileImageUrl;
+      email = profile?.email;
+      role = profile?.role ?? UserRole.parent;
     }
 
     return Scaffold(

@@ -4,7 +4,9 @@ import 'package:wajd/services/supabase_cleint.dart';
 import '../models/notification_model.dart';
 
 // User notifications provider
-final userNotificationsProvider = FutureProvider<List<AppNotification>>((ref) async {
+final userNotificationsProvider = FutureProvider<List<AppNotification>>((
+  ref,
+) async {
   final user = ref.watch(currentUserProvider);
   if (user == null) return [];
 
@@ -24,12 +26,14 @@ final unreadNotificationsCountProvider = Provider<int>((ref) {
 
 // Notifications state provider
 final notificationsProvider =
-StateNotifierProvider<NotificationsNotifier, AsyncValue<List<AppNotification>>>(
-      (ref) => NotificationsNotifier(ref),
-);
+    StateNotifierProvider<
+      NotificationsNotifier,
+      AsyncValue<List<AppNotification>>
+    >((ref) => NotificationsNotifier(ref));
 
-// Real-time notifications subscription
-final notificationsSubscriptionProvider = StreamProvider<AppNotification?>((ref) {
+final notificationsSubscriptionProvider = StreamProvider<AppNotification?>((
+  ref,
+) {
   final user = ref.watch(currentUserProvider);
   if (user == null) return const Stream.empty();
 
@@ -42,12 +46,13 @@ final notificationsSubscriptionProvider = StreamProvider<AppNotification?>((ref)
       .order('created_at')
       .limit(1)
       .map((data) {
-    if (data.isEmpty) return null;
-    return AppNotification.fromJson(data.first);
-  });
+        if (data.isEmpty) return null;
+        return AppNotification.fromJson(data.first);
+      });
 });
 
-class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotification>>> {
+class NotificationsNotifier
+    extends StateNotifier<AsyncValue<List<AppNotification>>> {
   final Ref _ref;
   late final SupabaseClient _client;
   RealtimeChannel? _subscription;
@@ -64,19 +69,19 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
     _subscription = _client
         .channel('notifications_${user.id}')
         .onPostgresChanges(
-      event: PostgresChangeEvent.insert,
-      schema: 'public',
-      table: 'notifications',
-      filter: PostgresChangeFilter(
-        type: PostgresChangeFilterType.eq,
-        column: 'user_id',
-        value: user.id,
-      ),
-      callback: (payload) {
-        final notification = AppNotification.fromJson(payload.newRecord);
-        _addNotification(notification);
-      },
-    )
+          event: PostgresChangeEvent.insert,
+          schema: 'public',
+          table: 'notifications',
+          filter: PostgresChangeFilter(
+            type: PostgresChangeFilterType.eq,
+            column: 'user_id',
+            value: user.id,
+          ),
+          callback: (payload) {
+            final notification = AppNotification.fromJson(payload.newRecord);
+            _addNotification(notification);
+          },
+        )
         .subscribe();
   }
 
@@ -112,9 +117,9 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
       await _client
           .from('notifications')
           .update({
-        'is_read': true,
-        'read_at': DateTime.now().toIso8601String(),
-      })
+            'is_read': true,
+            'read_at': DateTime.now().toIso8601String(),
+          })
           .eq('id', notificationId);
 
       // Update local state
@@ -138,9 +143,9 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
       await _client
           .from('notifications')
           .update({
-        'is_read': true,
-        'read_at': DateTime.now().toIso8601String(),
-      })
+            'is_read': true,
+            'read_at': DateTime.now().toIso8601String(),
+          })
           .eq('user_id', userId)
           .eq('is_read', false);
 
@@ -159,10 +164,7 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
 
   Future<bool> deleteNotification(String notificationId) async {
     try {
-      await _client
-          .from('notifications')
-          .delete()
-          .eq('id', notificationId);
+      await _client.from('notifications').delete().eq('id', notificationId);
 
       // Update local state
       final currentNotifications = state.value ?? [];
@@ -188,7 +190,6 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
   }) async {
     try {
       final notification = AppNotification(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
         userId: userId,
         type: type,
         title: title,
@@ -199,11 +200,10 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
         createdAt: DateTime.now(),
       );
 
-      await _client
-          .from('notifications')
-          .insert(notification.toJson());
+      await _client.from('notifications').insert(notification.toJson());
     } catch (e) {
       // Handle error
+      print(e);
     }
   }
 
@@ -227,92 +227,5 @@ class NotificationsNotifier extends StateNotifier<AsyncValue<List<AppNotificatio
   void dispose() {
     _subscription?.unsubscribe();
     super.dispose();
-  }
-}
-
-// Notification settings provider
-final notificationSettingsProvider =
-StateNotifierProvider<NotificationSettingsNotifier, NotificationSettings>(
-      (ref) => NotificationSettingsNotifier(),
-);
-
-class NotificationSettings {
-  final bool pushEnabled;
-  final bool emailEnabled;
-  final bool reportUpdates;
-  final bool childFound;
-  final bool systemAlerts;
-
-  NotificationSettings({
-    this.pushEnabled = true,
-    this.emailEnabled = true,
-    this.reportUpdates = true,
-    this.childFound = true,
-    this.systemAlerts = true,
-  });
-
-  NotificationSettings copyWith({
-    bool? pushEnabled,
-    bool? emailEnabled,
-    bool? reportUpdates,
-    bool? childFound,
-    bool? systemAlerts,
-  }) {
-    return NotificationSettings(
-      pushEnabled: pushEnabled ?? this.pushEnabled,
-      emailEnabled: emailEnabled ?? this.emailEnabled,
-      reportUpdates: reportUpdates ?? this.reportUpdates,
-      childFound: childFound ?? this.childFound,
-      systemAlerts: systemAlerts ?? this.systemAlerts,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'push_enabled': pushEnabled,
-      'email_enabled': emailEnabled,
-      'report_updates': reportUpdates,
-      'child_found': childFound,
-      'system_alerts': systemAlerts,
-    };
-  }
-
-  factory NotificationSettings.fromJson(Map<String, dynamic> json) {
-    return NotificationSettings(
-      pushEnabled: json['push_enabled'] ?? true,
-      emailEnabled: json['email_enabled'] ?? true,
-      reportUpdates: json['report_updates'] ?? true,
-      childFound: json['child_found'] ?? true,
-      systemAlerts: json['system_alerts'] ?? true,
-    );
-  }
-}
-
-class NotificationSettingsNotifier extends StateNotifier<NotificationSettings> {
-  NotificationSettingsNotifier() : super(NotificationSettings());
-
-  void updateSettings(NotificationSettings settings) {
-    state = settings;
-    // Save to local storage or remote database
-  }
-
-  void togglePushNotifications() {
-    state = state.copyWith(pushEnabled: !state.pushEnabled);
-  }
-
-  void toggleEmailNotifications() {
-    state = state.copyWith(emailEnabled: !state.emailEnabled);
-  }
-
-  void toggleReportUpdates() {
-    state = state.copyWith(reportUpdates: !state.reportUpdates);
-  }
-
-  void toggleChildFoundAlerts() {
-    state = state.copyWith(childFound: !state.childFound);
-  }
-
-  void toggleSystemAlerts() {
-    state = state.copyWith(systemAlerts: !state.systemAlerts);
   }
 }

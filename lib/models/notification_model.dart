@@ -11,7 +11,7 @@ enum NotificationType {
 }
 
 class AppNotification extends Equatable {
-  final String id;
+  final String? id;
   final String userId;
   final NotificationType type;
   final String title;
@@ -24,7 +24,7 @@ class AppNotification extends Equatable {
   final DateTime? readAt;
 
   const AppNotification({
-    required this.id,
+    this.id,
     required this.userId,
     required this.type,
     required this.title,
@@ -39,10 +39,10 @@ class AppNotification extends Equatable {
 
   factory AppNotification.fromJson(Map<String, dynamic> json) {
     return AppNotification(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       userId: json['user_id'] as String,
       type: NotificationType.values.firstWhere(
-            (type) => type.toString().split('.').last == json['type'],
+        (type) => type.toString().split('.').last == json['type'],
         orElse: () => NotificationType.generalInfo,
       ),
       title: json['title'] as String,
@@ -60,7 +60,7 @@ class AppNotification extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      if (id != null && id!.isNotEmpty) 'id': id,
       'user_id': userId,
       'type': type.toString().split('.').last,
       'title': title,

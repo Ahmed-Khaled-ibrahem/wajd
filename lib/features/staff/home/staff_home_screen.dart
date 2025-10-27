@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/const/colors.dart';
 import '../../../models/auth_state.dart';
 import '../../login/controller/auth_controller.dart';
+import '../../login/controller/current_profile_provider.dart';
 
 class StaffHomeScreen extends ConsumerStatefulWidget {
   const StaffHomeScreen({super.key});
@@ -18,13 +19,14 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final profile = ref.watch(currentUserProfileProvider);
 
     // Get user info from auth state
     String userName = 'User';
     String? imageUrl;
     if (authState is AuthAuthenticated) {
-      userName = authState.profile.name;
-      imageUrl = authState.profile.profileImageUrl;
+      userName = profile?.name ?? '';
+      imageUrl = profile?.profileImageUrl;
     }
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
