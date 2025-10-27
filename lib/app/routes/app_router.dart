@@ -12,6 +12,8 @@ import '../../features/parent/children/childern_list_screen.dart';
 import '../../features/parent/home/parent_layout.dart';
 import '../../features/parent/report/presentation/report_other_child_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
+import '../../features/profile/presentation/feedbacks_screen.dart';
+import '../../features/profile/presentation/help_and_support_screen.dart';
 import '../../features/splash/splash_screen.dart';
 import '../../features/staff/home/staff_layout.dart';
 import '../../features/staff/reports/reports_screen.dart';
@@ -39,6 +41,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/loading', builder: (context, state) => const LoadingScreen()),
           GoRoute(path: '/error', builder: (context, state) => const SignInErrorScreen()),
           GoRoute(path: '/signup', builder: (context, state) => const SignUpScreen()),
+          GoRoute(path: '/help-support', builder: (context, state) => const HelpAndSupportScreen()),
 
           // Admin routes
           GoRoute(
@@ -50,6 +53,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => const StaffManagementScreen(),
               ),
             ],
+          ),
+          GoRoute(
+            path: '/all-feedbacks',
+            builder: (context, state) => const FeedbacksScreen(),
           ),
           GoRoute(
             path: '/all-reports',

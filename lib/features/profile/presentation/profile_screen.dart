@@ -16,7 +16,6 @@ class ProfileScreen extends ConsumerWidget {
     final authState = ref.watch(authControllerProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    // Get user info from auth state
     String userName = 'User';
     String? imageUrl;
     String? email;
@@ -74,7 +73,6 @@ class ProfileScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor,
-                      // shape: BoxShape.circle(20),
                       border: Border.all(
                         color: isDark ? Colors.black26 : Colors.white,
                         width: 2,
@@ -138,24 +136,39 @@ class ProfileScreen extends ConsumerWidget {
                 context.push('/edit-profile');
               },
             ),
-            _buildProfileOption(
-              context,
-              icon: Iconsax.message_question,
-              title: 'Help & Support',
-              onTap: () {
-                // Navigate to help & support
+
+            Builder(
+              builder: (context) {
+                if (role == UserRole.admin) {
+                  return _buildProfileOption(
+                    context,
+                    icon: Icons.feedback_outlined,
+                    title: 'Users Feedbacks',
+                    onTap: () {
+                      context.push('/all-feedbacks');
+                    },
+                  );
+                }
+                return _buildProfileOption(
+                  context,
+                  icon: Iconsax.message_question,
+                  title: 'Help & Support',
+                  onTap: () {
+                    context.push('/help-support');
+                  },
+                );
               },
             ),
+
             _buildProfileOption(
               context,
               icon: Iconsax.info_circle,
               title: 'About App',
               onTap: () {
-                // Show about dialog
                 showAboutDialog(
                   context: context,
                   applicationName: 'Wajd',
-                  applicationVersion: '1.0.0',
+                  applicationVersion: '2.1.0',
                   children: [const Text('A child safety application.')],
                 );
               },
@@ -166,9 +179,7 @@ class ProfileScreen extends ConsumerWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Handle logout
                   ref.read(authControllerProvider.notifier).signOut();
-                  context.go('/login');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red.shade50,

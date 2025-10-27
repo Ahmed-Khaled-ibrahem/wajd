@@ -36,6 +36,8 @@ dependencies:
   # Permissions
   permission_handler: ^11.3.1
   iconsax_flutter: ^1.0.1
+  flutter_rating_bar: ^4.0.1
+  timeago: ^3.7.1
 
 
 
