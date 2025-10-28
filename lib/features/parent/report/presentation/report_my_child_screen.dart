@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:io';
 
+import '../../../../models/child_model.dart';
+
 class ReportMyChildScreen extends StatefulWidget {
   const ReportMyChildScreen({Key? key}) : super(key: key);
 
@@ -10,18 +12,10 @@ class ReportMyChildScreen extends StatefulWidget {
   _ReportMyChildScreenState createState() => _ReportMyChildScreenState();
 }
 
-class Child {
-  final String name;
-  final int age;
-  final String? imageUrl;
-
-  Child({required this.name, required this.age, this.imageUrl});
-}
 
 class _ReportMyChildScreenState extends State<ReportMyChildScreen> {
   final List<Child> children = [
-    Child(name: 'Ahmed', age: 8, imageUrl: null),
-    Child(name: 'Mariam', age: 10, imageUrl: null),
+
   ];
 
   int _currentIndex = 0;

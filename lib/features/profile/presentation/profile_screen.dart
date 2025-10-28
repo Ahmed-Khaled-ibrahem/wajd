@@ -7,7 +7,6 @@ import 'package:wajd/app/const/colors.dart';
 import 'package:wajd/features/login/controller/auth_controller.dart';
 import 'package:wajd/models/auth_state.dart';
 import 'package:wajd/models/user_profile.dart';
-
 import '../../login/controller/current_profile_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -140,28 +139,28 @@ class ProfileScreen extends ConsumerWidget {
               },
             ),
 
-            Builder(
-              builder: (context) {
-                if (role == UserRole.admin) {
-                  return _buildProfileOption(
-                    context,
-                    icon: Icons.feedback_outlined,
-                    title: 'Users Feedbacks',
-                    onTap: () {
-                      context.push('/all-feedbacks');
-                    },
-                  );
-                }
-                return _buildProfileOption(
-                  context,
-                  icon: Iconsax.message_question,
-                  title: 'Help & Support',
-                  onTap: () {
-                    context.push('/help-support');
-                  },
-                );
-              },
-            ),
+            // Builder(
+            //   builder: (context) {
+            //     if (role == UserRole.admin) {
+            //       return _buildProfileOption(
+            //         context,
+            //         icon: Icons.feedback_outlined,
+            //         title: 'Users Feedbacks',
+            //         onTap: () {
+            //           context.push('/all-feedbacks');
+            //         },
+            //       );
+            //     }
+            //     return _buildProfileOption(
+            //       context,
+            //       icon: Iconsax.message_question,
+            //       title: 'Help & Support',
+            //       onTap: () {
+            //         context.push('/help-support');
+            //       },
+            //     );
+            //   },
+            // ),
 
             _buildProfileOption(
               context,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wajd/services/supabase_cleint.dart';
@@ -111,12 +113,13 @@ class ChildrenNotifier extends StateNotifier<AsyncValue<List<Child>>> {
     }
   }
 
-  Future<String?> uploadChildImage(String childId, String imagePath) async {
+  Future<String?> uploadChildImage(String childId, File image) async {
     try {
       final fileName = 'child_$childId${DateTime.now().millisecondsSinceEpoch}';
+      final imageInBytes = await image.readAsBytes();
       final response = await _client.storage
           .from('children-images')
-          .upload(fileName, imagePath as dynamic);
+          .uploadBinary(fileName, imageInBytes);
 
       if (response.isNotEmpty) {
         final imageUrl = _client.storage

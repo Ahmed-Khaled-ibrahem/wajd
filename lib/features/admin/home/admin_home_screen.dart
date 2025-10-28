@@ -7,6 +7,7 @@ import '../../../app/const/colors.dart';
 import '../../../models/auth_state.dart';
 import '../../login/controller/auth_controller.dart';
 import '../../login/controller/current_profile_provider.dart';
+import '../../parent/home/myappBar.dart';
 
 class AdminHomeScreen extends ConsumerStatefulWidget {
   const AdminHomeScreen({super.key});
@@ -34,7 +35,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
         backgroundColor: Colors.white,
         body: CustomScrollView(
           slivers: [
-            _buildAppBar(isDark, userName, imageUrl: imageUrl),
+            MyAppBar( userName: userName, imageUrl: imageUrl,),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -121,100 +122,6 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
     );
   }
 
-  Widget _buildAppBar(bool isDark, String userName, {String? imageUrl}) {
-    return SliverAppBar(
-      expandedHeight: 150,
-      floating: true,
-      pinned: false,
-      backgroundColor: AppColors.primaryColor,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl ?? '',
-                      errorWidget: (context, url, error) {
-                        return Icon(
-                          Icons.person_outline,
-                          color: Colors.white,
-                          size: 40,
-                        );
-                      },
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Welcome Back,'.tr(),
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          userName,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // IconButton(
-                  //   onPressed: () {
-                  //     _showProfileMenu(context);
-                  //   },
-                  //   icon: Container(
-                  //     padding: const EdgeInsets.all(8),
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.white.withOpacity(0.2),
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //     child: const Icon(
-                  //       Icons.person_outline,
-                  //       color: Colors.white,
-                  //       size: 24,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildActionCard({
     required BuildContext context,

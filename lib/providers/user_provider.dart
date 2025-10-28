@@ -70,15 +70,10 @@ class UserProfileNotifier extends StateNotifier<AsyncValue<AppUser?>> {
   Future<String?> uploadProfileImage(String userId, File image) async {
     try {
       final fileName = 'profile_$userId${DateTime.now().millisecondsSinceEpoch}';
-      print('###');
-      print(fileName);
       final imageInBytes = await image.readAsBytes();
       final response = await _client.storage
           .from('profile-images')
-          .uploadBinary(fileName, imageInBytes)
-          .catchError((e) {
-            print(e);
-          });
+          .uploadBinary(fileName, imageInBytes);
       print('###');
       print(response);
 
