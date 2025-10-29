@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../app/const/colors.dart';
 import '../../../models/auth_state.dart';
 import '../../login/controller/auth_controller.dart';
 import '../../login/controller/current_profile_provider.dart';
@@ -10,7 +9,6 @@ import '../../parent/home/myappBar.dart';
 
 class StaffHomeScreen extends ConsumerStatefulWidget {
   const StaffHomeScreen({super.key});
-
   @override
   ConsumerState createState() => _StaffHomeScreenState();
 }
@@ -29,6 +27,7 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
       userName = profile?.name ?? '';
       imageUrl = profile?.profileImageUrl;
     }
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -42,7 +41,7 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildWelcomeSection(isDark),
+                    buildWelcomeSectionV1(isDark),
                     const SizedBox(height: 16),
                     _buildActionCard(
                       context: context,
@@ -69,47 +68,128 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
     );
   }
 
-  Widget _buildWelcomeSection(bool isDark) {
+  // VARIATION 1: Gradient Card with Pattern
+  Widget buildWelcomeSectionV1(bool isDark) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
       child: Container(
-        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: AppColors.backgroundColor,
-          borderRadius: BorderRadius.circular(20),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF10B981), Color(0xFF059669)],
+          ),
+          borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.3 : 0.08),
+              color: const Color(0xFF10B981).withOpacity(0.3),
               blurRadius: 20,
-              offset: const Offset(0, 8),
+              offset: const Offset(0, 10),
+              spreadRadius: 0,
             ),
           ],
         ),
-        child: Row(
+        child: Stack(
           children: [
-            CircleAvatar(
-              radius: 30,
-              child: ClipOval(child: Image.asset('assets/images/logo2.png')),
+            // Decorative pattern
+            Positioned(
+              right: -20,
+              top: -20,
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.1),
+                ),
+              ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Positioned(
+              right: 40,
+              bottom: -30,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white.withOpacity(0.05),
+                ),
+              ),
+            ),
+
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
                 children: [
-                  Text(
-                    'Proud of you'.tr(),
-                    style: TextStyle(
-                      color: isDark ? Colors.white : const Color(0xFF1A1A2E),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  // Logo with glow effect
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.3),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: CircleAvatar(
+                        radius: 32,
+                        backgroundColor: Colors.transparent,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/logo2.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Thank you being one of the wajd team'.tr(),
-                    style: TextStyle(
-                      color: isDark ? Colors.white : const Color(0xFF1A1A2E),
-                      fontSize: 12,
+                  const SizedBox(width: 16),
+
+                  // Text content
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.stars_rounded,
+                              color: Color(0xFFFBBF24),
+                              size: 20,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Proud of you'.tr(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Thank you being one of the wajd team'.tr(),
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.95),
+                            fontSize: 13,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

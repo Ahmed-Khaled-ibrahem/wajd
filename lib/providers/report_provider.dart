@@ -1,24 +1,19 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wajd/services/supabase_cleint.dart';
 import '../models/report_model.dart';
 
-
-
-
-// User's reports provider
-final userReportsProvider = FutureProvider<List<Report>>((ref) async {
-  final user = ref.watch(currentUserProvider);
-  if (user == null) return [];
-
-  final notifier = ref.read(reportsProvider.notifier);
-  return await notifier.fetchUserReports(user.id);
-});
-
-// All reports provider (for staff and admin)
 final allReportsProvider = FutureProvider<List<Report>>((ref) async {
-  final notifier = ref.read(reportsProvider.notifier);
-  return await notifier.fetchAllReports();
+  final client = ref.watch(supabaseClientProvider);
+  final response = await client
+      .from('reports')
+      .select()
+      .order('created_at', ascending: false);
+
+  return (response as List)
+      .map((e) => Report.fromJson(e as Map<String, dynamic>))
+      .toList();
 });
 
 // Active reports provider
@@ -29,9 +24,25 @@ final activeReportsProvider = FutureProvider<List<Report>>((ref) async {
 
 // Reports state provider
 final reportsProvider =
-StateNotifierProvider<ReportsNotifier, AsyncValue<List<Report>>>(
-      (ref) => ReportsNotifier(ref),
-);
+StateNotifierProvider<ReportsNotifier, AsyncValue<List<Report>>>((ref) {
+  final notifier = ReportsNotifier(ref);
+
+  // Listen for user changes
+  ref.listen(currentUserProvider, (previous, next) {
+    if (next != null && previous?.id != next.id) {
+      // 👇 Schedule after build to avoid modifying during initialization
+      Future.microtask(() => notifier.fetchUserReports(next.id));
+    }
+  });
+
+  // Optionally, trigger once if already logged in user exists
+  final user = ref.read(currentUserProvider);
+  if (user != null) {
+    Future.microtask(() => notifier.fetchUserReports(user.id));
+  }
+
+  return notifier;
+});
 
 // Report filters provider
 final reportFiltersProvider = StateProvider<ReportFilters>((ref) {
@@ -209,10 +220,7 @@ class ReportsNotifier extends StateNotifier<AsyncValue<List<Report>>> {
 
   Future<bool> updateReport(Report report) async {
     try {
-      await _client
-          .from('reports')
-          .update(report.toJson())
-          .eq('id', report.id);
+      await _client.from('reports').update(report.toJson()).eq('id', report.id);
 
       // Update local state
       final currentReports = state.value ?? [];
@@ -233,10 +241,10 @@ class ReportsNotifier extends StateNotifier<AsyncValue<List<Report>>> {
       await _client
           .from('reports')
           .update({
-        'assigned_staff_id': staffId,
-        'status': 'inProgress',
-        'updated_at': DateTime.now().toIso8601String(),
-      })
+            'assigned_staff_id': staffId,
+            'status': 'inProgress',
+            'updated_at': DateTime.now().toIso8601String(),
+          })
           .eq('id', reportId);
 
       // Refresh reports
@@ -252,11 +260,11 @@ class ReportsNotifier extends StateNotifier<AsyncValue<List<Report>>> {
       await _client
           .from('reports')
           .update({
-        'status': 'closed',
-        'closure_notes': closureNotes,
-        'closed_at': DateTime.now().toIso8601String(),
-        'updated_at': DateTime.now().toIso8601String(),
-      })
+            'status': 'closed',
+            'closure_notes': closureNotes,
+            'closed_at': DateTime.now().toIso8601String(),
+            'updated_at': DateTime.now().toIso8601String(),
+          })
           .eq('id', reportId);
 
       // Refresh reports
@@ -267,12 +275,14 @@ class ReportsNotifier extends StateNotifier<AsyncValue<List<Report>>> {
     }
   }
 
-  Future<String?> uploadReportImage(String reportId, String imagePath) async {
+  Future<String?> uploadReportImage(String reportId, File image) async {
     try {
-      final fileName = 'report_$reportId${DateTime.now().millisecondsSinceEpoch}';
+      final fileName =
+          'report_$reportId${DateTime.now().millisecondsSinceEpoch}';
+      final imageInBytes = await image.readAsBytes();
       final response = await _client.storage
           .from('report-images')
-          .upload(fileName, imagePath as dynamic);
+          .uploadBinary(fileName, imageInBytes);
 
       if (response.isNotEmpty) {
         final imageUrl = _client.storage
@@ -285,26 +295,40 @@ class ReportsNotifier extends StateNotifier<AsyncValue<List<Report>>> {
       return null;
     }
   }
+
+  updateReportStatus(String reportId, String status) async {
+    try {
+      await _client
+          .from('reports')
+          .update({'status': status})
+          .eq('id', reportId);
+
+      await fetchAllReports();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 // Single report provider
-final reportByIdProvider = FutureProvider.family<Report?, String>(
-      (ref, reportId) async {
-    final client = ref.watch(supabaseClientProvider);
-    try {
-      final response = await client
-          .from('reports')
-          .select()
-          .eq('id', reportId)
-          .single();
+final reportByIdProvider = FutureProvider.family<Report?, String>((
+  ref,
+  reportId,
+) async {
+  final client = ref.watch(supabaseClientProvider);
+  try {
+    final response = await client
+        .from('reports')
+        .select()
+        .eq('id', reportId)
+        .single();
 
-      return Report.fromJson(response);
-    } catch (e) {
-      return null;
-    }
-  },
-);
-
+    return Report.fromJson(response);
+  } catch (e) {
+    return null;
+  }
+});
 
 final reportStatisticsProvider = FutureProvider<ReportStatistics>((ref) async {
   final client = ref.watch(supabaseClientProvider);
@@ -343,6 +367,7 @@ final reportStatisticsProvider = FutureProvider<ReportStatistics>((ref) async {
     return ReportStatistics.empty();
   }
 });
+
 // Report Filters Model
 class ReportFilters {
   final ReportStatus? status;
@@ -393,11 +418,6 @@ class ReportStatistics {
   });
 
   factory ReportStatistics.empty() {
-    return ReportStatistics(
-      total: 0,
-      open: 0,
-      closed: 0,
-      inProgress: 0,
-    );
+    return ReportStatistics(total: 0, open: 0, closed: 0, inProgress: 0);
   }
 }

@@ -7,6 +7,7 @@ import '../../features/admin/staff/staff_management_screen.dart';
 import '../../features/login/login_screen.dart';
 import '../../features/login/sign_up_screen.dart';
 import '../../features/login/signin_error_screen.dart';
+import '../../features/parent/case_tracking/case_history.dart';
 import '../../features/parent/children/add_new_child_screen.dart';
 import '../../features/parent/children/childern_list_screen.dart';
 import '../../features/parent/children/edit_child_screen.dart';
@@ -19,6 +20,7 @@ import '../../features/profile/presentation/help_and_support_screen.dart';
 import '../../features/splash/splash_screen.dart';
 import '../../features/staff/home/staff_layout.dart';
 import '../../features/staff/reports/reports_screen.dart';
+import '../../features/staff/reports/view_report_details.dart';
 import '../../models/child_model.dart';
 import '../wrapper/app_wrapper.dart';
 
@@ -78,7 +80,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/all-reports',
-            builder: (context, state) => const ReportsScreen(),
+            builder: (context, state) => const StaffReportsScreen(),
+          ),
+          GoRoute(
+            path: '/report-details/:id',
+            builder: (context, state) {
+              final reportId = state.pathParameters['id']!;
+              return ViewReportDetailsScreen(reportId: reportId);
+            },
           ),
 
           // Parent routes
@@ -95,6 +104,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/report_other_child',
             builder: (context, state) => const ReportOtherChildScreen(),
+          ),
+          GoRoute(
+            path: '/reports-history',
+            builder: (context, state) => const ReportsHistoryScreen(),
           ),
 
           // Common routes
