@@ -10,7 +10,6 @@ import '../../../services/supabase_cleint.dart';
 
 class StaffReportsScreen extends ConsumerStatefulWidget {
   const StaffReportsScreen({super.key});
-
   @override
   ConsumerState<StaffReportsScreen> createState() => _StaffReportsScreenState();
 }

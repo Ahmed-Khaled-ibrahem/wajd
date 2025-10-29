@@ -12,7 +12,6 @@ import '../../features/parent/children/add_new_child_screen.dart';
 import '../../features/parent/children/childern_list_screen.dart';
 import '../../features/parent/children/edit_child_screen.dart';
 import '../../features/parent/home/parent_layout.dart';
-import '../../features/parent/report/presentation/report_my_child_screen.dart';
 import '../../features/parent/report/presentation/report_other_child_screen.dart';
 import '../../features/profile/presentation/edit_profile_screen.dart';
 import '../../features/profile/presentation/feedbacks_screen.dart';
