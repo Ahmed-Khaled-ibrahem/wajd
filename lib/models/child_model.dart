@@ -6,7 +6,7 @@ class Child extends Equatable {
   final String name;
   final int age;
   final String gender;
-  final String? bloodType;
+  // final String? bloodType;
   final String? medicalConditions;
   final String description;
   final String? imageUrl;
@@ -22,7 +22,7 @@ class Child extends Equatable {
     required this.name,
     required this.age,
     required this.gender,
-    this.bloodType,
+    // this.bloodType,
     this.medicalConditions,
     required this.description,
     this.imageUrl,
@@ -40,7 +40,7 @@ class Child extends Equatable {
       name: json['name'] as String,
       age: json['age'] as int,
       gender: json['gender'] as String,
-      bloodType: json['blood_type'] as String?,
+      // bloodType: json['blood_type'] as String?,
       medicalConditions: json['medical_conditions'] as String?,
       description: json['description'] as String,
       imageUrl: json['image_url'] as String?,
@@ -63,7 +63,7 @@ class Child extends Equatable {
       'name': name,
       'age': age,
       'gender': gender,
-      'blood_type': bloodType,
+      // 'blood_type': bloodType,
       'medical_conditions': medicalConditions,
       'description': description,
       'image_url': imageUrl,
@@ -97,7 +97,7 @@ class Child extends Equatable {
       name: name ?? this.name,
       age: age ?? this.age,
       gender: gender ?? this.gender,
-      bloodType: bloodType ?? this.bloodType,
+      // bloodType: bloodType ?? this.bloodType,
       medicalConditions: medicalConditions ?? this.medicalConditions,
       description: description ?? this.description,
       imageUrl: imageUrl ?? this.imageUrl,
@@ -116,7 +116,7 @@ class Child extends Equatable {
     name,
     age,
     gender,
-    bloodType,
+    // bloodType,
     medicalConditions,
     description,
     imageUrl,

@@ -240,7 +240,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
         name: _nameController.text.trim(),
         age: int.parse(_ageController.text),
         gender: _selectedGender!,
-        bloodType: _selectedBloodType,
+        // bloodType: _selectedBloodType,
         medicalConditions: _medicalConditionsController.text.trim().isNotEmpty
             ? _medicalConditionsController.text.trim()
             : null,

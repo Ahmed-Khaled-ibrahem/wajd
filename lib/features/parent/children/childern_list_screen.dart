@@ -468,15 +468,15 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                           ),
                         ],
                       ),
-                      if (child.bloodType != null) ...[
-                        const SizedBox(height: 6),
-                        _buildInfoChip(
-                          icon: Icons.bloodtype_rounded,
-                          label: 'Blood: ${child.bloodType}',
-                          isSmallScreen: isSmallScreen,
-                          color: const Color(0xFFEF4444),
-                        ),
-                      ],
+                      // if (child.bloodType != null) ...[
+                      //   const SizedBox(height: 6),
+                      //   _buildInfoChip(
+                      //     icon: Icons.bloodtype_rounded,
+                      //     label: 'Blood: ${child.bloodType}',
+                      //     isSmallScreen: isSmallScreen,
+                      //     color: const Color(0xFFEF4444),
+                      //   ),
+                      // ],
                     ],
                   ),
                 ),

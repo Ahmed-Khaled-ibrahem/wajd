@@ -162,19 +162,19 @@ class ProfileScreen extends ConsumerWidget {
             //   },
             // ),
 
-            _buildProfileOption(
-              context,
-              icon: Iconsax.info_circle,
-              title: 'About App',
-              onTap: () {
-                showAboutDialog(
-                  context: context,
-                  applicationName: 'Wajd',
-                  applicationVersion: '2.1.0',
-                  children: [const Text('A child safety application.')],
-                );
-              },
-            ),
+            // _buildProfileOption(
+            //   context,
+            //   icon: Iconsax.info_circle,
+            //   title: 'About App',
+            //   onTap: () {
+            //     showAboutDialog(
+            //       context: context,
+            //       applicationName: 'Wajd',
+            //       applicationVersion: '2.1.0',
+            //       children: [const Text('A child safety application.')],
+            //     );
+            //   },
+            // ),
             const SizedBox(height: 24),
             // Logout Button
             SizedBox(
