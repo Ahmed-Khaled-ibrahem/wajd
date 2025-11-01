@@ -4,16 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wajd/models/report_model.dart';
+import '../../../models/user_profile.dart';
 import '../../../providers/report_provider.dart';
 import '../../../services/supabase_cleint.dart';
+import '../../login/controller/current_profile_provider.dart';
 
 class ViewReportDetailsScreen extends ConsumerStatefulWidget {
   final String reportId;
 
-  const ViewReportDetailsScreen({
-    super.key,
-    required this.reportId,
-  });
+  const ViewReportDetailsScreen({super.key, required this.reportId});
 
   @override
   ConsumerState<ViewReportDetailsScreen> createState() =>
@@ -30,8 +29,9 @@ class _ViewReportDetailsScreenState
     final isSmallScreen = screenWidth < 600;
 
     return Scaffold(
-      backgroundColor:
-          isDark ? const Color(0xFF0F172A) : const Color(0xFFF9FAFB),
+      backgroundColor: isDark
+          ? const Color(0xFF0F172A)
+          : const Color(0xFFF9FAFB),
       body: reportAsync.when(
         loading: () => const Center(
           child: CircularProgressIndicator(color: Color(0xFF10B981)),
@@ -56,39 +56,154 @@ class _ViewReportDetailsScreenState
         SliverPadding(
           padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
           sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              _buildStatusCard(report, statusColor, isDark, isSmallScreen),
-              const SizedBox(height: 16),
-              _buildSectionCard('Child Information', Icons.child_care_rounded, isDark, isSmallScreen, [
-                _buildInfoRow('Name', report.childName, Icons.person_rounded, isDark),
-                _buildInfoRow('Age', '${report.childAge} years', Icons.cake_rounded, isDark),
-                _buildInfoRow('Gender', report.childGender, report.childGender == 'Male' ? Icons.male_rounded : Icons.female_rounded, isDark),
-                _buildInfoRow('Description', report.childDescription, Icons.description_rounded, isDark),
-              ]),
-              const SizedBox(height: 16),
-              _buildSectionCard('Last Seen Details', Icons.location_on_rounded, isDark, isSmallScreen, [
-                _buildInfoRow('Location', report.lastSeenLocation, Icons.place_rounded, isDark),
-                _buildInfoRow('Date & Time', DateFormat('MMM dd, yyyy - hh:mm a').format(report.lastSeenTime), Icons.access_time_rounded, isDark),
-              ]),
-              const SizedBox(height: 16),
-              if (report.childImageUrl != null || report.additionalImages.isNotEmpty) ...[_buildImagesSection(report, isDark, isSmallScreen), const SizedBox(height: 16)],
-              _buildSectionCard('Reporter Contact', Icons.contact_phone_rounded, isDark, isSmallScreen, [
-                _buildInfoRow('Phone', report.reporterPhone, Icons.phone_rounded, isDark),
-                if (report.reporterEmail != null) _buildInfoRow('Email', report.reporterEmail!, Icons.email_rounded, isDark),
-              ]),
-              const SizedBox(height: 16),
-              if (report.additionalNotes != null && report.additionalNotes!.isNotEmpty) ...[_buildSectionCard('Additional Notes', Icons.note_rounded, isDark, isSmallScreen, [Text(report.additionalNotes!, style: TextStyle(fontSize: 14, color: isDark ? Colors.grey[300] : const Color(0xFF374151), height: 1.5))]), const SizedBox(height: 16)],
-              if (report.closureNotes != null && report.closureNotes!.isNotEmpty) ...[_buildSectionCard('Closure Notes', Icons.check_circle_rounded, isDark, isSmallScreen, [Text(report.closureNotes!, style: TextStyle(fontSize: 14, color: isDark ? Colors.grey[300] : const Color(0xFF374151), height: 1.5))]), const SizedBox(height: 16)],
-              _buildActionButtons(report, isDark, isSmallScreen),
-              const SizedBox(height: 32),
-            ]),
+            delegate:
+                SliverChildListDelegate([
+                  _buildStatusCard(report, statusColor, isDark, isSmallScreen),
+                  const SizedBox(height: 16),
+                  _buildSectionCard(
+                    'Child Information',
+                    Icons.child_care_rounded,
+                    isDark,
+                    isSmallScreen,
+                    [
+                      _buildInfoRow(
+                        'Name',
+                        report.childName,
+                        Icons.person_rounded,
+                        isDark,
+                      ),
+                      _buildInfoRow(
+                        'Age',
+                        '${report.childAge} years',
+                        Icons.cake_rounded,
+                        isDark,
+                      ),
+                      _buildInfoRow(
+                        'Gender',
+                        report.childGender,
+                        report.childGender == 'Male'
+                            ? Icons.male_rounded
+                            : Icons.female_rounded,
+                        isDark,
+                      ),
+                      _buildInfoRow(
+                        'Description',
+                        report.childDescription,
+                        Icons.description_rounded,
+                        isDark,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  _buildSectionCard(
+                    'Last Seen Details',
+                    Icons.location_on_rounded,
+                    isDark,
+                    isSmallScreen,
+                    [
+                      _buildInfoRow(
+                        'Location',
+                        report.lastSeenLocation,
+                        Icons.place_rounded,
+                        isDark,
+                      ),
+                      _buildInfoRow(
+                        'Date & Time',
+                        DateFormat(
+                          'MMM dd, yyyy - hh:mm a',
+                        ).format(report.lastSeenTime),
+                        Icons.access_time_rounded,
+                        isDark,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  if (report.childImageUrl != null ||
+                      report.additionalImages.isNotEmpty) ...[
+                    _buildImagesSection(report, isDark, isSmallScreen),
+                    const SizedBox(height: 16),
+                  ],
+                  _buildSectionCard(
+                    'Reporter Contact',
+                    Icons.contact_phone_rounded,
+                    isDark,
+                    isSmallScreen,
+                    [
+                      _buildInfoRow(
+                        'Phone',
+                        report.reporterPhone,
+                        Icons.phone_rounded,
+                        isDark,
+                      ),
+                      if (report.reporterEmail != null)
+                        _buildInfoRow(
+                          'Email',
+                          report.reporterEmail!,
+                          Icons.email_rounded,
+                          isDark,
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  if (report.additionalNotes != null &&
+                      report.additionalNotes!.isNotEmpty) ...[
+                    _buildSectionCard(
+                      'Additional Notes',
+                      Icons.note_rounded,
+                      isDark,
+                      isSmallScreen,
+                      [
+                        Text(
+                          report.additionalNotes!,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isDark
+                                ? Colors.grey[300]
+                                : const Color(0xFF374151),
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (report.closureNotes != null &&
+                      report.closureNotes!.isNotEmpty) ...[
+                    _buildSectionCard(
+                      'Closure Notes',
+                      Icons.check_circle_rounded,
+                      isDark,
+                      isSmallScreen,
+                      [
+                        Text(
+                          report.closureNotes!,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: isDark
+                                ? Colors.grey[300]
+                                : const Color(0xFF374151),
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  _buildActionButtons(report, isDark, isSmallScreen),
+                  const SizedBox(height: 32),
+                ]),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildSliverAppBar(Report report, Color statusColor, bool isDark, bool isSmallScreen) {
+  Widget _buildSliverAppBar(
+    Report report,
+    Color statusColor,
+    bool isDark,
+    bool isSmallScreen,
+  ) {
     return SliverAppBar(
       expandedHeight: 200,
       floating: false,
@@ -116,9 +231,22 @@ class _ViewReportDetailsScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text('Report Details', style: TextStyle(color: Colors.white, fontSize: isSmallScreen ? 24 : 28, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Report Details',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: isSmallScreen ? 24 : 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  Text('ID: ${report.id.substring(0, 8)}', style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: isSmallScreen ? 13 : 14)),
+                  Text(
+                    'ID: ${report.id.substring(0, 8)}',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: isSmallScreen ? 13 : 14,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -128,32 +256,69 @@ class _ViewReportDetailsScreenState
     );
   }
 
-  Widget _buildStatusCard(Report report, Color statusColor, bool isDark, bool isSmallScreen) {
+  Widget _buildStatusCard(
+    Report report,
+    Color statusColor,
+    bool isDark,
+    bool isSmallScreen,
+  ) {
     return Container(
       padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1F2937) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: statusColor.withOpacity(0.3), width: 2),
-        boxShadow: [BoxShadow(color: statusColor.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, 4))],
+        boxShadow: [
+          BoxShadow(
+            color: statusColor.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(color: statusColor.withOpacity(0.15), borderRadius: BorderRadius.circular(12)),
-            child: Icon(_getStatusIcon(report.status), color: statusColor, size: 32),
+            decoration: BoxDecoration(
+              color: statusColor.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              _getStatusIcon(report.status),
+              color: statusColor,
+              size: 32,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Current Status', style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : const Color(0xFF6B7280))),
+                Text(
+                  'Current Status',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDark ? Colors.grey[400] : const Color(0xFF6B7280),
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(_getStatusText(report.status), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: statusColor)),
+                Text(
+                  _getStatusText(report.status),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: statusColor,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text('Created ${_formatTimeAgo(report.createdAt)}', style: TextStyle(fontSize: 11, color: isDark ? Colors.grey[400] : const Color(0xFF6B7280))),
+                Text(
+                  'Created ${_formatTimeAgo(report.createdAt)}',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: isDark ? Colors.grey[400] : const Color(0xFF6B7280),
+                  ),
+                ),
               ],
             ),
           ),
@@ -162,18 +327,43 @@ class _ViewReportDetailsScreenState
     );
   }
 
-  Widget _buildSectionCard(String title, IconData icon, bool isDark, bool isSmallScreen, List<Widget> children) {
+  Widget _buildSectionCard(
+    String title,
+    IconData icon,
+    bool isDark,
+    bool isSmallScreen,
+    List<Widget> children,
+  ) {
     return Container(
       padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF1F2937) : Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [Icon(icon, color: const Color(0xFF10B981), size: 24), const SizedBox(width: 12), Text(title, style: TextStyle(fontSize: isSmallScreen ? 16 : 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : const Color(0xFF047857)))]),
+          Row(
+            children: [
+              Icon(icon, color: const Color(0xFF10B981), size: 24),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 16 : 18,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : const Color(0xFF047857),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
           ...children,
         ],
@@ -193,9 +383,22 @@ class _ViewReportDetailsScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(fontSize: 12, color: isDark ? Colors.grey[400] : const Color(0xFF6B7280))),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDark ? Colors.grey[400] : const Color(0xFF6B7280),
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: isDark ? Colors.white : const Color(0xFF1F2937))),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : const Color(0xFF1F2937),
+                  ),
+                ),
               ],
             ),
           ),
@@ -205,21 +408,76 @@ class _ViewReportDetailsScreenState
   }
 
   Widget _buildImagesSection(Report report, bool isDark, bool isSmallScreen) {
-    final allImages = [if (report.childImageUrl != null) report.childImageUrl!, ...report.additionalImages];
+    final allImages = [
+      if (report.childImageUrl != null) report.childImageUrl!,
+      ...report.additionalImages,
+    ];
     return Container(
       padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
-      decoration: BoxDecoration(color: isDark ? const Color(0xFF1F2937) : Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 2))]),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1F2937) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(children: [const Icon(Icons.photo_library_rounded, color: Color(0xFF10B981), size: 24), const SizedBox(width: 12), Text('Photos', style: TextStyle(fontSize: isSmallScreen ? 16 : 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : const Color(0xFF047857)))]),
+          Row(
+            children: [
+              const Icon(
+                Icons.photo_library_rounded,
+                color: Color(0xFF10B981),
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Photos',
+                style: TextStyle(
+                  fontSize: isSmallScreen ? 16 : 18,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : const Color(0xFF047857),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: isSmallScreen ? 2 : 3, crossAxisSpacing: 12, mainAxisSpacing: 12),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isSmallScreen ? 2 : 3,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
             itemCount: allImages.length,
-            itemBuilder: (context, index) => GestureDetector(onTap: () => _showImageDialog(allImages[index]), child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: allImages[index], fit: BoxFit.cover, placeholder: (context, url) => Container(color: const Color(0xFF10B981).withOpacity(0.1), child: const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)))), errorWidget: (context, url, error) => Container(color: Colors.grey[300], child: const Icon(Icons.broken_image, size: 40))))),
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => _showImageDialog(allImages[index]),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  imageUrl: allImages[index],
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF10B981),
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.broken_image, size: 40),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -228,12 +486,72 @@ class _ViewReportDetailsScreenState
 
   Widget _buildActionButtons(Report report, bool isDark, bool isSmallScreen) {
     final currentUser = ref.read(currentUserProvider);
+    final currentUserData = ref.read(currentUserProfileProvider);
     final isAssignedToMe = report.assignedStaffId == currentUser?.id;
+    if( currentUserData?.role == UserRole.parent ){
+      return Container();
+    }
     return Column(
       children: [
-        if (!isAssignedToMe && report.assignedStaffId == null) SizedBox(width: double.infinity, height: isSmallScreen ? 48 : 52, child: ElevatedButton.icon(onPressed: () => _assignToMe(report), icon: const Icon(Icons.person_add_rounded), label: const Text('Assign to Me'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF3B82F6), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))))),
+        if (!isAssignedToMe && report.assignedStaffId == null)
+          SizedBox(
+            width: double.infinity,
+            height: isSmallScreen ? 48 : 52,
+            child: ElevatedButton.icon(
+              onPressed: () => _assignToMe(report),
+              icon: const Icon(Icons.person_add_rounded),
+              label: const Text('Assign to Me'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF3B82F6),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
         const SizedBox(height: 12),
-        Row(children: [Expanded(child: SizedBox(height: isSmallScreen ? 48 : 52, child: OutlinedButton.icon(onPressed: () => _showChangeStatusDialog(report), icon: const Icon(Icons.swap_horiz_rounded), label: const Text('Change Status'), style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFF10B981), side: const BorderSide(color: Color(0xFF10B981)), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))))), if (report.status != ReportStatus.closed) ...[const SizedBox(width: 12), Expanded(child: SizedBox(height: isSmallScreen ? 48 : 52, child: ElevatedButton.icon(onPressed: () => _showCloseReportDialog(report), icon: const Icon(Icons.check_circle_rounded), label: const Text('Close Report'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))))))]]),
+        Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: isSmallScreen ? 48 : 52,
+                child: OutlinedButton.icon(
+                  onPressed: () => _showChangeStatusDialog(report),
+                  icon: const Icon(Icons.swap_horiz_rounded),
+                  label: const Text('Change Status'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: const Color(0xFF10B981),
+                    side: const BorderSide(color: Color(0xFF10B981)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            if (report.status != ReportStatus.closed) ...[
+              const SizedBox(width: 12),
+              Expanded(
+                child: SizedBox(
+                  height: isSmallScreen ? 48 : 52,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _showCloseReportDialog(report),
+                    icon: const Icon(Icons.check_circle_rounded),
+                    label: const Text('Close Report'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF10B981),
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
       ],
     );
   }
@@ -247,11 +565,31 @@ class _ViewReportDetailsScreenState
           children: [
             const Icon(Icons.error_outline, size: 64, color: Color(0xFFEF4444)),
             const SizedBox(height: 16),
-            Text('Error Loading Report', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : const Color(0xFF1F2937))),
+            Text(
+              'Error Loading Report',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : const Color(0xFF1F2937),
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(error.toString(), style: const TextStyle(color: Color(0xFF6B7280)), textAlign: TextAlign.center),
+            Text(
+              error.toString(),
+              style: const TextStyle(color: Color(0xFF6B7280)),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 24),
-            ElevatedButton.icon(onPressed: () => ref.invalidate(reportByIdProvider(widget.reportId)), icon: const Icon(Icons.refresh_rounded), label: const Text('Retry'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981), foregroundColor: Colors.white)),
+            ElevatedButton.icon(
+              onPressed: () =>
+                  ref.invalidate(reportByIdProvider(widget.reportId)),
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('Retry'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF10B981),
+                foregroundColor: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
@@ -267,11 +605,30 @@ class _ViewReportDetailsScreenState
           children: [
             const Icon(Icons.search_off, size: 64, color: Color(0xFF6B7280)),
             const SizedBox(height: 16),
-            Text('Report Not Found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: isDark ? Colors.white : const Color(0xFF1F2937))),
+            Text(
+              'Report Not Found',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : const Color(0xFF1F2937),
+              ),
+            ),
             const SizedBox(height: 8),
-            const Text('The report you are looking for does not exist.', style: TextStyle(color: Color(0xFF6B7280)), textAlign: TextAlign.center),
+            const Text(
+              'The report you are looking for does not exist.',
+              style: TextStyle(color: Color(0xFF6B7280)),
+              textAlign: TextAlign.center,
+            ),
             const SizedBox(height: 24),
-            ElevatedButton.icon(onPressed: () => context.pop(), icon: const Icon(Icons.arrow_back), label: const Text('Go Back'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981), foregroundColor: Colors.white)),
+            ElevatedButton.icon(
+              onPressed: () => context.pop(),
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('Go Back'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF10B981),
+                foregroundColor: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
@@ -288,7 +645,18 @@ class _ViewReportDetailsScreenState
             Stack(
               children: [
                 CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.contain),
-                Positioned(top: 8, right: 8, child: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close), style: IconButton.styleFrom(backgroundColor: Colors.black54, foregroundColor: Colors.white))),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close),
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.black54,
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -301,14 +669,26 @@ class _ViewReportDetailsScreenState
     final currentUser = ref.read(currentUserProvider);
     if (currentUser == null) return;
     try {
-      await ref.read(reportsProvider.notifier).assignReportToStaff(report.id, currentUser.id);
+      await ref
+          .read(reportsProvider.notifier)
+          .assignReportToStaff(report.id, currentUser.id);
       ref.invalidate(reportByIdProvider(widget.reportId));
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report assigned to you successfully'), backgroundColor: Color(0xFF10B981)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Report assigned to you successfully'),
+            backgroundColor: Color(0xFF10B981),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to assign report: $e'), backgroundColor: const Color(0xFFEF4444)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to assign report: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
+        );
       }
     }
   }
@@ -322,36 +702,85 @@ class _ViewReportDetailsScreenState
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildStatusOption(report, ReportStatus.open, 'Open', Icons.warning_rounded, const Color(0xFFEF4444)),
-            _buildStatusOption(report, ReportStatus.inProgress, 'In Progress', Icons.pending_rounded, const Color(0xFFF59E0B)),
-            _buildStatusOption(report, ReportStatus.closed, 'Closed', Icons.check_circle_rounded, const Color(0xFF10B981)),
-            _buildStatusOption(report, ReportStatus.cancelled, 'Cancelled', Icons.cancel_rounded, const Color(0xFF6B7280)),
+            _buildStatusOption(
+              report,
+              ReportStatus.open,
+              'Open',
+              Icons.warning_rounded,
+              const Color(0xFFEF4444),
+            ),
+            _buildStatusOption(
+              report,
+              ReportStatus.inProgress,
+              'In Progress',
+              Icons.pending_rounded,
+              const Color(0xFFF59E0B),
+            ),
+            _buildStatusOption(
+              report,
+              ReportStatus.closed,
+              'Closed',
+              Icons.check_circle_rounded,
+              const Color(0xFF10B981),
+            ),
+            _buildStatusOption(
+              report,
+              ReportStatus.cancelled,
+              'Cancelled',
+              Icons.cancel_rounded,
+              const Color(0xFF6B7280),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusOption(Report report, ReportStatus status, String label, IconData icon, Color color) {
+  Widget _buildStatusOption(
+    Report report,
+    ReportStatus status,
+    String label,
+    IconData icon,
+    Color color,
+  ) {
     final isCurrentStatus = report.status == status;
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(label),
-      trailing: isCurrentStatus ? const Icon(Icons.check_rounded, color: Color(0xFF10B981)) : null,
-      onTap: isCurrentStatus ? null : () async { Navigator.pop(context); await _changeStatus(report, status); },
+      trailing: isCurrentStatus
+          ? const Icon(Icons.check_rounded, color: Color(0xFF10B981))
+          : null,
+      onTap: isCurrentStatus
+          ? null
+          : () async {
+              Navigator.pop(context);
+              await _changeStatus(report, status);
+            },
     );
   }
 
   Future<void> _changeStatus(Report report, ReportStatus newStatus) async {
     try {
-      await ref.read(reportsProvider.notifier).updateReportStatus(report.id, newStatus.name);
+      await ref
+          .read(reportsProvider.notifier)
+          .updateReportStatus(report.id, newStatus.name);
       ref.invalidate(reportByIdProvider(widget.reportId));
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Status changed to ${_getStatusText(newStatus)}'), backgroundColor: const Color(0xFF10B981)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Status changed to ${_getStatusText(newStatus)}'),
+            backgroundColor: const Color(0xFF10B981),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to change status: $e'), backgroundColor: const Color(0xFFEF4444)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to change status: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
+        );
       }
     }
   }
@@ -366,14 +795,38 @@ class _ViewReportDetailsScreenState
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Are you sure you want to close this report? Please provide closure notes:'),
+            const Text(
+              'Are you sure you want to close this report? Please provide closure notes:',
+            ),
             const SizedBox(height: 16),
-            TextField(controller: notesController, maxLines: 3, decoration: InputDecoration(hintText: 'Enter closure notes...', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)))),
+            TextField(
+              controller: notesController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: 'Enter closure notes...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          ElevatedButton(onPressed: () async { Navigator.pop(context); await _closeReport(report, notesController.text); }, style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF10B981), foregroundColor: Colors.white), child: const Text('Close Report')),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _closeReport(report, notesController.text);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF10B981),
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Close Report'),
+          ),
         ],
       ),
     );
@@ -384,39 +837,61 @@ class _ViewReportDetailsScreenState
       await ref.read(reportsProvider.notifier).closeReport(report.id, notes);
       ref.invalidate(reportByIdProvider(widget.reportId));
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report closed successfully'), backgroundColor: Color(0xFF10B981)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Report closed successfully'),
+            backgroundColor: Color(0xFF10B981),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to close report: $e'), backgroundColor: const Color(0xFFEF4444)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to close report: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
+        );
       }
     }
   }
 
   Color _getStatusColor(ReportStatus status) {
     switch (status) {
-      case ReportStatus.open: return const Color(0xFFEF4444);
-      case ReportStatus.inProgress: return const Color(0xFFF59E0B);
-      case ReportStatus.closed: return const Color(0xFF10B981);
-      case ReportStatus.cancelled: return const Color(0xFF6B7280);
+      case ReportStatus.open:
+        return const Color(0xFFEF4444);
+      case ReportStatus.inProgress:
+        return const Color(0xFFF59E0B);
+      case ReportStatus.closed:
+        return const Color(0xFF10B981);
+      case ReportStatus.cancelled:
+        return const Color(0xFF6B7280);
     }
   }
 
   IconData _getStatusIcon(ReportStatus status) {
     switch (status) {
-      case ReportStatus.open: return Icons.warning_rounded;
-      case ReportStatus.inProgress: return Icons.pending_rounded;
-      case ReportStatus.closed: return Icons.check_circle_rounded;
-      case ReportStatus.cancelled: return Icons.cancel_rounded;
+      case ReportStatus.open:
+        return Icons.warning_rounded;
+      case ReportStatus.inProgress:
+        return Icons.pending_rounded;
+      case ReportStatus.closed:
+        return Icons.check_circle_rounded;
+      case ReportStatus.cancelled:
+        return Icons.cancel_rounded;
     }
   }
 
   String _getStatusText(ReportStatus status) {
     switch (status) {
-      case ReportStatus.open: return 'OPEN';
-      case ReportStatus.inProgress: return 'IN PROGRESS';
-      case ReportStatus.closed: return 'CLOSED';
-      case ReportStatus.cancelled: return 'CANCELLED';
+      case ReportStatus.open:
+        return 'OPEN';
+      case ReportStatus.inProgress:
+        return 'IN PROGRESS';
+      case ReportStatus.closed:
+        return 'CLOSED';
+      case ReportStatus.cancelled:
+        return 'CANCELLED';
     }
   }
 

@@ -212,19 +212,19 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref
-              .read(notificationsProvider.notifier)
-              .createNotification(
-                userId: ref.read(currentUserProvider)!.id,
-                type: NotificationType.reportUpdated,
-                title: 'ttttt',
-                message: 'rrrr',
-              );
-        },
-        child: const Icon(Icons.new_label),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     ref
+      //         .read(notificationsProvider.notifier)
+      //         .createNotification(
+      //           userId: ref.read(currentUserProvider)!.id,
+      //           type: NotificationType.reportUpdated,
+      //           title: 'ttttt',
+      //           message: 'rrrr',
+      //         );
+      //   },
+      //   child: const Icon(Icons.new_label),
+      // ),
       body: notificationsAsync.when(
         data: (notifications) {
           if (notifications.isEmpty) {

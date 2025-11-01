@@ -250,30 +250,29 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 32),
-                    ElevatedButton.icon(
-                      onPressed: () => context.push('/add-child'),
-                      icon: const Icon(Icons.add_rounded),
-                      label: const Text('Add Your First Child'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF10B981),
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isSmallScreen ? 24 : 32,
-                          vertical: isSmallScreen ? 14 : 16,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        elevation: 0,
-                      ),
-                    ),
+                    // const SizedBox(height: 32),
+                    // ElevatedButton.icon(
+                    //   onPressed: () => context.push('/add-child'),
+                    //   icon: const Icon(Icons.add_rounded),
+                    //   label: const Text('Add Your First Child'),
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: const Color(0xFF10B981),
+                    //     foregroundColor: Colors.white,
+                    //     padding: EdgeInsets.symmetric(
+                    //       horizontal: isSmallScreen ? 24 : 32,
+                    //       vertical: isSmallScreen ? 14 : 16,
+                    //     ),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //     ),
+                    //     elevation: 0,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             );
           }
-
           return RefreshIndicator(
             onRefresh: _loadChildren,
             color: const Color(0xFF10B981),
