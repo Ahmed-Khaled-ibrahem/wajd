@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
+import '../../../app/const/colors.dart';
 import '../../../models/notification_model.dart';
 import '../../../providers/notifi_provider.dart';
 import '../../../services/supabase_cleint.dart';
@@ -154,7 +155,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                 '$unreadCount unread',
                 style: TextStyle(
                   fontSize: 12,
-                  color: const Color(0xFF10B981),
+                  color: AppColors.primaryColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -193,7 +194,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                   children: [
                     Icon(
                       Icons.refresh_rounded,
-                      color: const Color(0xFF10B981),
+                      color: AppColors.primaryColor,
                       size: 20,
                     ),
                     const SizedBox(width: 12),
@@ -241,8 +242,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            const Color(0xFF10B981).withOpacity(0.1),
-                            const Color(0xFF059669).withOpacity(0.05),
+                            AppColors.primaryColor.withOpacity(0.1),
+                            AppColors.primaryColor.withOpacity(0.05),
                           ],
                         ),
                         shape: BoxShape.circle,
@@ -250,7 +251,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                       child: Icon(
                         Iconsax.notification,
                         size: isSmallScreen ? 48 : 64,
-                        color: const Color(0xFF10B981),
+                        color: AppColors.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -259,7 +260,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                       style: TextStyle(
                         fontSize: isSmallScreen ? 18 : 20,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF047857),
+                        color: AppColors.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -279,7 +280,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
           return RefreshIndicator(
             onRefresh: _loadNotifications,
-            color: const Color(0xFF10B981),
+            color: AppColors.primaryColor,
             child: ListView.builder(
               itemCount: notifications.length,
               padding: EdgeInsets.all(isSmallScreen ? 8 : 12),
@@ -296,8 +297,8 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
             ),
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF10B981)),
+        loading: () =>  Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
         ),
         error: (error, stack) => Center(
           child: Padding(
@@ -334,7 +335,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                   icon: const Icon(Icons.refresh_rounded),
                   label: const Text('Try Again'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF10B981),
+                    backgroundColor: AppColors.primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -387,7 +388,7 @@ class _NotificationItem extends StatelessWidget {
   Color _getNotificationColor(NotificationType type) {
     switch (type) {
       case NotificationType.childFound:
-        return const Color(0xFF10B981);
+        return AppColors.primaryColor;
       case NotificationType.reportUpdated:
         return const Color(0xFF3B82F6);
       case NotificationType.generalInfo:
@@ -395,7 +396,7 @@ class _NotificationItem extends StatelessWidget {
       case NotificationType.staffAssigned:
         return const Color(0xFFF59E0B);
       case NotificationType.reportUpdated:
-        return const Color(0xFF10B981);
+        return AppColors.primaryColor;
       default:
         return const Color(0xFF6B7280);
     }
@@ -453,22 +454,22 @@ class _NotificationItem extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    const Color(0xFF10B981).withOpacity(0.05),
-                    const Color(0xFF059669).withOpacity(0.02),
+                    AppColors.primaryColor.withOpacity(0.05),
+                    AppColors.primaryColor.withOpacity(0.02),
                   ],
                 ),
           color: notification.isRead ? null : null,
           border: Border.all(
             color: notification.isRead
                 ? (isDark ? Colors.grey.shade800 : Colors.grey.shade200)
-                : const Color(0xFF10B981).withOpacity(0.3),
+                : AppColors.primaryColor.withOpacity(0.3),
             width: notification.isRead ? 1 : 1.5,
           ),
           boxShadow: [
             BoxShadow(
               color: notification.isRead
                   ? Colors.black.withOpacity(0.03)
-                  : const Color(0xFF10B981).withOpacity(0.08),
+                  : AppColors.primaryColor.withOpacity(0.08),
               blurRadius: notification.isRead ? 4 : 10,
               offset: const Offset(0, 2),
             ),
@@ -479,8 +480,8 @@ class _NotificationItem extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(16),
-            splashColor: const Color(0xFF10B981).withOpacity(0.08),
-            highlightColor: const Color(0xFF059669).withOpacity(0.04),
+            splashColor: AppColors.primaryColor.withOpacity(0.08),
+            highlightColor: AppColors.primaryColor.withOpacity(0.04),
             child: Padding(
               padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
               child: Row(
@@ -529,7 +530,7 @@ class _NotificationItem extends StatelessWidget {
                                       ? (isDark
                                             ? Colors.white
                                             : const Color(0xFF1F2937))
-                                      : const Color(0xFF047857),
+                                      : AppColors.primaryColor,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -580,13 +581,13 @@ class _NotificationItem extends StatelessWidget {
                       height: 10,
                       margin: const EdgeInsets.only(left: 8, top: 4),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF10B981), Color(0xFF059669)],
+                        gradient:  LinearGradient(
+                          colors: AppColors.gradientColor,
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF10B981).withOpacity(0.5),
+                            color: AppColors.primaryColor.withOpacity(0.5),
                             blurRadius: 4,
                             spreadRadius: 1,
                           ),

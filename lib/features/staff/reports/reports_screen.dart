@@ -5,11 +5,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wajd/models/report_model.dart';
+import '../../../app/const/colors.dart';
 import '../../../providers/report_provider.dart';
 import '../../../services/supabase_cleint.dart';
+import '../../login/controller/current_profile_provider.dart';
 
 class StaffReportsScreen extends ConsumerStatefulWidget {
   const StaffReportsScreen({super.key});
+
   @override
   ConsumerState<StaffReportsScreen> createState() => _StaffReportsScreenState();
 }
@@ -37,9 +40,11 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
   Widget build(BuildContext context) {
     final allReportsAsync = ref.watch(allReportsProvider);
     final statsAsync = ref.watch(reportStatisticsProvider);
+    final rep = ref.watch(reportsProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
+    final isAdmin = ref.watch(currentUserProfileProvider)?.role.name == 'admin';
 
     return Scaffold(
       backgroundColor: isDark
@@ -61,9 +66,10 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             delegate: _TabBarDelegate(
               tabBar: TabBar(
                 controller: _tabController,
-                indicatorColor: const Color(0xFF10B981),
+                // indicatorColor: const Color(0xFF10B981),
+                indicatorColor: AppColors.primaryColor,
                 indicatorWeight: 3,
-                labelColor: const Color(0xFF10B981),
+                labelColor: AppColors.primaryColor,
                 unselectedLabelColor: isDark
                     ? Colors.grey[400]
                     : const Color(0xFF6B7280),
@@ -119,11 +125,12 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildActiveReportsTab(allReportsAsync, isDark, isSmallScreen),
+                _buildActiveReportsTab(allReportsAsync, isDark, isSmallScreen, isAdmin),
                 _buildArchivedReportsTab(
                   allReportsAsync,
                   isDark,
                   isSmallScreen,
+                    isAdmin
                 ),
               ],
             ),
@@ -148,10 +155,10 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Color(0xFF10B981), Color(0xFF059669)],
+              colors: AppColors.gradientColor,
             ),
           ),
           child: SafeArea(
@@ -265,7 +272,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               'Closed',
               '${stats.closed}',
               Icons.check_circle_rounded,
-              const Color(0xFF10B981),
+              AppColors.primaryColor,
               isSmallScreen,
             ),
           ),
@@ -327,16 +334,16 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF3F4F6),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFF10B981).withOpacity(0.2),
+                color: AppColors.primaryColor.withOpacity(0.2),
               ),
             ),
             child: TextField(
               onChanged: (value) => setState(() => _searchQuery = value),
               decoration: InputDecoration(
                 hintText: 'Search reports by name, ID, location...',
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   Icons.search_rounded,
-                  color: Color(0xFF10B981),
+                  color: AppColors.primaryColor,
                 ),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
@@ -376,7 +383,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 Container(
                   width: 1,
                   height: 30,
-                  color: const Color(0xFF10B981).withOpacity(0.2),
+                  color: AppColors.primaryColor.withOpacity(0.2),
                 ),
                 const SizedBox(width: 16),
                 _buildSortChip('Recent', 'recent', Icons.access_time_rounded),
@@ -405,7 +412,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
           Icon(
             icon,
             size: 16,
-            color: isSelected ? Colors.white : const Color(0xFF10B981),
+            color: isSelected ? Colors.white : AppColors.primaryColor,
           ),
           const SizedBox(width: 6),
           Text(label),
@@ -413,14 +420,14 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       ),
       selected: isSelected,
       onSelected: (selected) => setState(() => _selectedFilter = value),
-      selectedColor: const Color(0xFF10B981),
+      selectedColor: AppColors.primaryColor,
       checkmarkColor: Colors.white,
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : const Color(0xFF10B981),
+        color: isSelected ? Colors.white : AppColors.primaryColor,
         fontWeight: FontWeight.w600,
         fontSize: 12,
       ),
-      side: BorderSide(color: const Color(0xFF10B981).withOpacity(0.3)),
+      side: BorderSide(color: AppColors.primaryColor.withOpacity(0.3)),
     );
   }
 
@@ -475,10 +482,11 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     AsyncValue<List<Report>> reportsAsync,
     bool isDark,
     bool isSmallScreen,
+      bool isAdmin
   ) {
     return reportsAsync.when(
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: Color(0xFF10B981)),
+      loading: () => Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
       ),
       error: (error, stack) => _buildErrorState(error, isDark),
       data: (reports) {
@@ -508,7 +516,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             ref.invalidate(allReportsProvider);
             await ref.read(allReportsProvider.future);
           },
-          color: const Color(0xFF10B981),
+          color: AppColors.primaryColor,
           child: ListView.builder(
             padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
             itemCount: filteredReports.length,
@@ -517,6 +525,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 filteredReports[index],
                 isDark,
                 isSmallScreen,
+                  isAdmin
               );
             },
           ),
@@ -529,10 +538,11 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     AsyncValue<List<Report>> reportsAsync,
     bool isDark,
     bool isSmallScreen,
+      bool isAdmin,
   ) {
     return reportsAsync.when(
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: Color(0xFF10B981)),
+      loading: () => Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
       ),
       error: (error, stack) => _buildErrorState(error, isDark),
       data: (reports) {
@@ -562,7 +572,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             ref.invalidate(allReportsProvider);
             await ref.read(allReportsProvider.future);
           },
-          color: const Color(0xFF10B981),
+          color: AppColors.primaryColor,
           child: ListView.builder(
             padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
             itemCount: filteredReports.length,
@@ -571,6 +581,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 filteredReports[index],
                 isDark,
                 isSmallScreen,
+                  isAdmin
               );
             },
           ),
@@ -624,7 +635,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     return filtered;
   }
 
-  Widget _buildStaffReportCard(Report report, bool isDark, bool isSmallScreen) {
+  Widget _buildStaffReportCard(Report report, bool isDark, bool isSmallScreen, bool isAdmin) {
     final statusColor = _getStatusColor(report.status);
     final isAssignedToMe =
         report.assignedStaffId == ref.read(currentUserProvider)?.id;
@@ -689,7 +700,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                                     fontWeight: FontWeight.bold,
                                     color: isDark
                                         ? Colors.white
-                                        : const Color(0xFF047857),
+                                        : AppColors.primaryColor,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -779,7 +790,8 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                       ),
                       onSelected: (value) => _handleStaffAction(value, report),
                       itemBuilder: (context) => [
-                        const PopupMenuItem(
+                        if(!isAdmin)
+                         PopupMenuItem(
                           value: 'assign',
                           child: Row(
                             children: [
@@ -789,16 +801,16 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                             ],
                           ),
                         ),
-                        const PopupMenuItem(
-                          value: 'status',
-                          child: Row(
-                            children: [
-                              Icon(Icons.swap_horiz_rounded, size: 18),
-                              SizedBox(width: 12),
-                              Text('Change Status'),
-                            ],
-                          ),
-                        ),
+                        // const PopupMenuItem(
+                        //   value: 'status',
+                        //   child: Row(
+                        //     children: [
+                        //       Icon(Icons.swap_horiz_rounded, size: 18),
+                        //       SizedBox(width: 12),
+                        //       Text('Change Status'),
+                        //     ],
+                        //   ),
+                        // ),
                         const PopupMenuItem(
                           value: 'view',
                           child: Row(
@@ -810,14 +822,14 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                           ),
                         ),
                         if (report.status != ReportStatus.closed)
-                          const PopupMenuItem(
+                          PopupMenuItem(
                             value: 'close',
                             child: Row(
                               children: [
                                 Icon(
                                   Icons.check_circle_rounded,
                                   size: 18,
-                                  color: Color(0xFF10B981),
+                                  color: AppColors.primaryColor,
                                 ),
                                 SizedBox(width: 12),
                                 Text('Close Report'),
@@ -890,7 +902,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                         Icon(
                           Icons.access_time_rounded,
                           size: isSmallScreen ? 16 : 18,
-                          color: const Color(0xFF10B981),
+                          color: AppColors.primaryColor,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -1132,12 +1144,12 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF10B981).withOpacity(0.08),
-            const Color(0xFF059669).withOpacity(0.04),
+            AppColors.primaryColor.withOpacity(0.08),
+            AppColors.primaryColor.withOpacity(0.04),
           ],
         ),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFF10B981).withOpacity(0.2)),
+        border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1145,7 +1157,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
           Icon(
             icon,
             size: isSmallScreen ? 14 : 16,
-            color: const Color(0xFF059669),
+            color: AppColors.primaryColor,
           ),
           const SizedBox(width: 6),
           Text(
@@ -1153,7 +1165,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             style: TextStyle(
               fontSize: isSmallScreen ? 11 : 12,
               fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white : const Color(0xFF047857),
+              color: isDark ? Colors.white : AppColors.primaryColor,
             ),
           ),
         ],
@@ -1178,13 +1190,13 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF10B981).withOpacity(0.1),
-                    const Color(0xFF059669).withOpacity(0.05),
+                    AppColors.primaryColor.withOpacity(0.1),
+                    AppColors.primaryColor.withOpacity(0.05),
                   ],
                 ),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 64, color: const Color(0xFF10B981)),
+              child: Icon(icon, size: 64, color: AppColors.primaryColor),
             ),
             const SizedBox(height: 24),
             Text(
@@ -1192,7 +1204,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : const Color(0xFF047857),
+                color: isDark ? Colors.white : AppColors.primaryColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -1210,7 +1222,6 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
   }
 
   Widget _buildErrorState(Object error, bool isDark) {
-    print(error);
 
     return Center(
       child: Padding(
@@ -1245,7 +1256,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 icon: const Icon(Icons.refresh_rounded),
                 label: const Text('Retry'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF10B981),
+                  backgroundColor: AppColors.primaryColor,
                   foregroundColor: Colors.white,
                 ),
               ),
@@ -1261,9 +1272,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       case 'assign':
         _assignToMe(report);
         break;
-      case 'status':
-        _showChangeStatusDialog(report);
-        break;
+      // case 'status':
+      //   _showChangeStatusDialog(report);
+      //   break;
       case 'view':
         context.push('/report-details/${report.id}');
         break;
@@ -1277,6 +1288,30 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     final currentUser = ref.read(currentUserProvider);
     if (currentUser == null) return;
 
+    if (report.assignedStaffId == currentUser.id) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Report is already assigned to you'),
+            backgroundColor: AppColors.primaryColor,
+          ),
+        );
+      }
+      return;
+    }
+
+    if (report.assignedStaffId != null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Report is already assigned to another staff member'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
+        );
+      }
+      return;
+    }
+
     try {
       await ref
           .read(reportsProvider.notifier)
@@ -1284,9 +1319,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Report assigned to you successfully'),
-            backgroundColor: Color(0xFF10B981),
+            backgroundColor: AppColors.primaryColor,
           ),
         );
       }
@@ -1302,48 +1337,52 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     }
   }
 
-  void _showChangeStatusDialog(Report report) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Change Status'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildStatusOption(
-              report,
-              ReportStatus.open,
-              'Open',
-              Icons.warning_rounded,
-              const Color(0xFFEF4444),
-            ),
-            _buildStatusOption(
-              report,
-              ReportStatus.inProgress,
-              'In Progress',
-              Icons.pending_rounded,
-              const Color(0xFFF59E0B),
-            ),
-            _buildStatusOption(
-              report,
-              ReportStatus.closed,
-              'Closed',
-              Icons.check_circle_rounded,
-              const Color(0xFF10B981),
-            ),
-            _buildStatusOption(
-              report,
-              ReportStatus.cancelled,
-              'Cancelled',
-              Icons.cancel_rounded,
-              const Color(0xFF6B7280),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // void _showChangeStatusDialog(Report report) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (ctx) => AlertDialog(
+  //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+  //       title: const Text('Change Status 1'),
+  //       content: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           _buildStatusOption(
+  //             report,
+  //             ReportStatus.open,
+  //             'Open',
+  //             Icons.warning_rounded,
+  //             const Color(0xFFEF4444),
+  //               ctx
+  //           ),
+  //           _buildStatusOption(
+  //             report,
+  //             ReportStatus.inProgress,
+  //             'In Progress',
+  //             Icons.pending_rounded,
+  //             const Color(0xFFF59E0B),
+  //               ctx
+  //           ),
+  //           _buildStatusOption(
+  //             report,
+  //             ReportStatus.closed,
+  //             'Closed',
+  //             Icons.check_circle_rounded,
+  //             AppColors.primaryColor,
+  //               ctx
+  //           ),
+  //           _buildStatusOption(
+  //             report,
+  //             ReportStatus.cancelled,
+  //             'Cancelled',
+  //             Icons.cancel_rounded,
+  //             const Color(0xFF6B7280),
+  //             ctx,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildStatusOption(
     Report report,
@@ -1351,19 +1390,20 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     String label,
     IconData icon,
     Color color,
+    BuildContext ctx,
   ) {
     final isCurrentStatus = report.status == status;
     return ListTile(
       leading: Icon(icon, color: color),
       title: Text(label),
       trailing: isCurrentStatus
-          ? const Icon(Icons.check_rounded, color: Color(0xFF10B981))
+          ? Icon(Icons.check_rounded, color: AppColors.primaryColor)
           : null,
       onTap: isCurrentStatus
           ? null
-          : () async {
-              Navigator.pop(context);
-              await _changeStatus(report, status);
+          : () {
+              ctx.pop();
+              _changeStatus(report, status);
             },
     );
   }
@@ -1378,7 +1418,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Status changed to ${_getStatusText(newStatus)}'),
-            backgroundColor: const Color(0xFF10B981),
+            backgroundColor: AppColors.primaryColor,
           ),
         );
       }
@@ -1432,7 +1472,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               await _closeReport(report, notesController.text);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
             ),
             child: const Text('Close Report'),
@@ -1448,9 +1488,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+           SnackBar(
             content: Text('Report closed successfully'),
-            backgroundColor: Color(0xFF10B981),
+            backgroundColor: AppColors.primaryColor,
           ),
         );
       }
@@ -1473,7 +1513,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       case ReportStatus.inProgress:
         return const Color(0xFFF59E0B);
       case ReportStatus.closed:
-        return const Color(0xFF10B981);
+        return AppColors.primaryColor;
       case ReportStatus.cancelled:
         return const Color(0xFF6B7280);
     }

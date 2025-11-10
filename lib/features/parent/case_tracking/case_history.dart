@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wajd/models/report_model.dart';
+import '../../../app/const/colors.dart';
 import '../../../providers/report_provider.dart';
 
 class ReportsHistoryScreen extends ConsumerStatefulWidget {
@@ -69,16 +70,16 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
                         : const Color(0xFFF3F4F6),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: const Color(0xFF10B981).withOpacity(0.2),
+                      color: AppColors.primaryColor.withOpacity(0.2),
                     ),
                   ),
                   child: TextField(
                     onChanged: (value) => setState(() => _searchQuery = value),
                     decoration: InputDecoration(
                       hintText: 'Search reports...',
-                      prefixIcon: const Icon(
+                      prefixIcon:  Icon(
                         Icons.search_rounded,
-                        color: Color(0xFF10B981),
+                        color: AppColors.primaryColor,
                       ),
                       suffixIcon: _searchQuery.isNotEmpty
                           ? IconButton(
@@ -102,9 +103,9 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
                 child: TabBar(
                   controller: _tabController,
                   isScrollable: true,
-                  indicatorColor: const Color(0xFF10B981),
+                  indicatorColor: AppColors.primaryColor,
                   indicatorWeight: 3,
-                  labelColor: const Color(0xFF10B981),
+                  labelColor: AppColors.primaryColor,
                   unselectedLabelColor: isDark
                       ? Colors.grey[400]
                       : const Color(0xFF6B7280),
@@ -125,8 +126,8 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
         ),
       ),
       body: userReportsAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF10B981)),
+        loading: () =>  Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
         ),
         error: (error, stack) => _buildErrorState(error, isDark),
         data: (reports) {
@@ -195,7 +196,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
       onRefresh: () async {
         ref.invalidate(reportsProvider);
       },
-      color: const Color(0xFF10B981),
+      color: AppColors.primaryColor,
       child: ListView.builder(
         padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
         itemCount: reports.length,
@@ -271,7 +272,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
                                     fontWeight: FontWeight.bold,
                                     color: isDark
                                         ? Colors.white
-                                        : const Color(0xFF047857),
+                                        : AppColors.primaryColor,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -466,7 +467,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
                         Icon(
                           Icons.access_time_rounded,
                           size: isSmallScreen ? 16 : 18,
-                          color: const Color(0xFF10B981),
+                          color: AppColors.primaryColor,
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -696,19 +697,19 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color(0xFF10B981).withOpacity(0.08),
-            const Color(0xFF059669).withOpacity(0.04),
+            AppColors.primaryColor.withOpacity(0.08),
+            AppColors.primaryColor.withOpacity(0.04),
           ],
         ),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFF10B981).withOpacity(0.2)),
+        border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
       ),
       child: Row(
         children: [
           Icon(
             icon,
             size: isSmallScreen ? 16 : 18,
-            color: const Color(0xFF059669),
+            color: AppColors.primaryColor,
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -730,7 +731,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
                   style: TextStyle(
                     fontSize: isSmallScreen ? 11 : 12,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : const Color(0xFF047857),
+                    color: isDark ? Colors.white : AppColors.primaryColor,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -755,16 +756,16 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    const Color(0xFF10B981).withOpacity(0.1),
-                    const Color(0xFF059669).withOpacity(0.05),
+                    AppColors.primaryColor.withOpacity(0.1),
+                    AppColors.primaryColor.withOpacity(0.05),
                   ],
                 ),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child:  Icon(
                 Icons.inbox_rounded,
                 size: 64,
-                color: Color(0xFF10B981),
+                color: AppColors.primaryColor,
               ),
             ),
             const SizedBox(height: 24),
@@ -773,7 +774,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : const Color(0xFF047857),
+                color: isDark ? Colors.white : AppColors.primaryColor,
               ),
             ),
             const SizedBox(height: 8),
@@ -820,7 +821,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
               ),
             ),
@@ -873,8 +874,8 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
               leading: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                  gradient:  LinearGradient(
+                    colors: AppColors.gradientColor,
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -900,9 +901,9 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
   void _shareReport(Report report) {
     // Implement share functionality
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+       SnackBar(
         content: Text('Share functionality coming soon'),
-        backgroundColor: Color(0xFF10B981),
+        backgroundColor: AppColors.primaryColor,
       ),
     );
   }
@@ -910,9 +911,9 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
   void _editReport(Report report) {
     // Implement edit functionality
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+       SnackBar(
         content: Text('Edit functionality coming soon'),
-        backgroundColor: Color(0xFF10B981),
+        backgroundColor: AppColors.primaryColor,
       ),
     );
   }
@@ -920,7 +921,7 @@ class _ReportsHistoryScreenState extends ConsumerState<ReportsHistoryScreen>
   Color _getStatusColor(ReportStatus status) {
     switch (status) {
       case ReportStatus.closed:
-        return const Color(0xFF10B981);
+        return AppColors.primaryColor;
       case ReportStatus.inProgress:
         return const Color(0xFFF59E0B);
       case ReportStatus.open:

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wajd/models/child_model.dart';
 import 'package:wajd/services/supabase_cleint.dart';
+import '../../../app/const/colors.dart';
 import '../../../providers/cheldren_provider.dart';
 
 class EditChildScreen extends ConsumerStatefulWidget {
@@ -83,8 +84,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+            colorScheme:  ColorScheme.light(
+              primary: AppColors.primaryColor,
               onPrimary: Colors.white,
               onSurface: Color(0xFF1F2937),
             ),
@@ -163,7 +164,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(
-            color: const Color(0xFF10B981).withOpacity(0.2),
+            color: AppColors.primaryColor.withOpacity(0.2),
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -173,8 +174,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF10B981), Color(0xFF059669)],
+                gradient:  LinearGradient(
+                  colors: AppColors.gradientColor,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -302,7 +303,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
         ),
         backgroundColor: isError
             ? const Color(0xFFEF4444)
-            : const Color(0xFF10B981),
+            : AppColors.primaryColor,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
@@ -389,14 +390,14 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                 height: isSmallScreen ? 140 : 160,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const LinearGradient(
+                  gradient:  LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    colors: AppColors.gradientColor,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF10B981).withOpacity(0.3),
+                      color: AppColors.primaryColor.withOpacity(0.3),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                     ),
@@ -435,8 +436,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF10B981), Color(0xFF059669)],
+                      gradient:  LinearGradient(
+                        colors: AppColors.gradientColor,
                       ),
                       shape: BoxShape.circle,
                       border: Border.all(
@@ -445,7 +446,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF10B981).withOpacity(0.4),
+                          color: AppColors.primaryColor.withOpacity(0.4),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -476,11 +477,11 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
 
   Widget _buildPlaceholderImage(bool isSmallScreen) {
     return Container(
-      color: const Color(0xFF10B981).withOpacity(0.1),
+      color: AppColors.primaryColor.withOpacity(0.1),
       child: Icon(
         Icons.child_care_rounded,
         size: isSmallScreen ? 60 : 70,
-        color: const Color(0xFF10B981),
+        color: AppColors.primaryColor,
       ),
     );
   }
@@ -492,10 +493,10 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
           width: 4,
           height: 24,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient:  LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF10B981), Color(0xFF059669)],
+              colors: AppColors.gradientColor,
             ),
             borderRadius: BorderRadius.circular(2),
           ),
@@ -506,7 +507,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
           style: TextStyle(
             fontSize: isSmallScreen ? 17 : 19,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF047857),
+            color: AppColors.primaryColor,
           ),
         ),
       ],
@@ -518,7 +519,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -535,8 +536,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -569,10 +570,10 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF10B981).withOpacity(0.05),
+        color: AppColors.primaryColor.withOpacity(0.05),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.2),
+          color: AppColors.primaryColor.withOpacity(0.2),
           width: 1.5,
         ),
       ),
@@ -583,7 +584,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             children: [
               Icon(
                 Icons.wc_rounded,
-                color: const Color(0xFF10B981),
+                color: AppColors.primaryColor,
                 size: isSmallScreen ? 20 : 22,
               ),
               const SizedBox(width: 8),
@@ -592,7 +593,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                 style: TextStyle(
                   fontSize: isSmallScreen ? 14 : 15,
                   fontWeight: FontWeight.w600,
-                  color: const Color(0xFF047857),
+                  color: AppColors.primaryColor,
                 ),
               ),
             ],
@@ -611,8 +612,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
                         gradient: isSelected
-                            ? const LinearGradient(
-                                colors: [Color(0xFF10B981), Color(0xFF059669)],
+                            ?  LinearGradient(
+                                colors: AppColors.gradientColor,
                               )
                             : null,
                         color: isSelected ? null : Colors.white,
@@ -620,7 +621,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                         border: Border.all(
                           color: isSelected
                               ? Colors.transparent
-                              : const Color(0xFF10B981).withOpacity(0.3),
+                              : AppColors.primaryColor.withOpacity(0.3),
                           width: 1.5,
                         ),
                       ),
@@ -635,7 +636,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                                 : Icons.transgender_rounded,
                             color: isSelected
                                 ? Colors.white
-                                : const Color(0xFF10B981),
+                                : AppColors.primaryColor,
                             size: isSmallScreen ? 18 : 20,
                           ),
                           const SizedBox(width: 6),
@@ -646,7 +647,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                               fontWeight: FontWeight.w600,
                               color: isSelected
                                   ? Colors.white
-                                  : const Color(0xFF047857),
+                                  : AppColors.primaryColor,
                             ),
                           ),
                         ],
@@ -671,7 +672,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: const Color(0xFF10B981).withOpacity(0.3),
+                color: AppColors.primaryColor.withOpacity(0.3),
                 width: 1.5,
               ),
             ),
@@ -690,8 +691,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    gradient:  LinearGradient(
+                      colors: AppColors.gradientColor,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -717,7 +718,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: const Color(0xFF10B981).withOpacity(0.3),
+                color: AppColors.primaryColor.withOpacity(0.3),
                 width: 1.5,
               ),
             ),
@@ -731,8 +732,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                   margin: const EdgeInsets.all(10),
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    gradient:  LinearGradient(
+                      colors: AppColors.gradientColor,
                     ),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -764,7 +765,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color:AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -807,7 +808,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -847,7 +848,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -862,8 +863,8 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -896,10 +897,10 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF10B981).withOpacity(0.05),
+        color: AppColors.primaryColor.withOpacity(0.05),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.2),
+          color: AppColors.primaryColor.withOpacity(0.2),
           width: 1.5,
         ),
       ),
@@ -914,7 +915,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: const Color(0xFF10B981).withOpacity(0.3),
+                      color: AppColors.primaryColor.withOpacity(0.3),
                       width: 1,
                     ),
                   ),
@@ -939,13 +940,13 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
               const SizedBox(width: 8),
               Container(
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                  gradient:  LinearGradient(
+                    colors: AppColors.gradientColor,
                   ),
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF10B981).withOpacity(0.3),
+                      color: AppColors.primaryColor.withOpacity(0.3),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -970,13 +971,13 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    gradient:  LinearGradient(
+                      colors: AppColors.gradientColor,
                     ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF10B981).withOpacity(0.2),
+                        color: AppColors.primaryColor.withOpacity(0.2),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -1016,15 +1017,15 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
   Widget _buildSaveButton(bool isSmallScreen) {
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient:  LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
+          colors: AppColors.gradientColor,
         ),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.3),
+            color: AppColors.primaryColor.withOpacity(0.3),
             blurRadius: 15,
             offset: const Offset(0, 6),
           ),

@@ -99,12 +99,12 @@ class FeedbacksScreen extends ConsumerWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: const Color(0xFF10B981).withOpacity(0.2),
+                color: AppColors.primaryColor.withOpacity(0.2),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF10B981).withOpacity(0.08),
+                  color: AppColors.primaryColor.withOpacity(0.08),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -115,10 +115,10 @@ class FeedbacksScreen extends ConsumerWidget {
                 Container(
                   padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                    gradient:  LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
+                      colors: AppColors.gradientColor,
                     ),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
@@ -225,15 +225,15 @@ class FeedbacksScreen extends ConsumerWidget {
                             iconColor.withOpacity(0.1),
                           ]
                         : [
-                            const Color(0xFF10B981).withOpacity(0.2),
-                            const Color(0xFF059669).withOpacity(0.1),
+                      AppColors.primaryColor.withOpacity(0.2),
+                      AppColors.primaryColor.withOpacity(0.1),
                           ],
                   ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   icon,
-                  color: iconColor ?? const Color(0xFF059669),
+                  color: iconColor ?? AppColors.primaryColor,
                   size: isSmallScreen ? 24 : 28,
                 ),
               ),
@@ -266,7 +266,7 @@ class FeedbacksScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: isSmallScreen ? 24 : 28,
               fontWeight: FontWeight.bold,
-              color: const Color(0xFF047857),
+              color: AppColors.primaryColor,
             ),
           ),
           const SizedBox(height: 4),
@@ -305,21 +305,21 @@ class FeedbacksScreen extends ConsumerWidget {
           colors: feedback.isRead
               ? [Colors.white, const Color(0xFFF9FAFB)]
               : [
-                  const Color(0xFF10B981).withOpacity(0.05),
-                  const Color(0xFF059669).withOpacity(0.02),
+            AppColors.primaryColor.withOpacity(0.05),
+            AppColors.primaryColor.withOpacity(0.02),
                 ],
         ),
         border: Border.all(
           color: feedback.isRead
-              ? const Color(0xFFE5E7EB)
-              : const Color(0xFF10B981).withOpacity(0.3),
+              ? AppColors.primaryColor
+              : AppColors.primaryColor.withOpacity(0.3),
           width: feedback.isRead ? 1 : 2,
         ),
         boxShadow: [
           BoxShadow(
             color: feedback.isRead
                 ? Colors.black.withOpacity(0.04)
-                : const Color(0xFF10B981).withOpacity(0.1),
+                : AppColors.primaryColor.withOpacity(0.1),
             blurRadius: feedback.isRead ? 8 : 12,
             offset: const Offset(0, 3),
             spreadRadius: 0,
@@ -336,8 +336,8 @@ class FeedbacksScreen extends ConsumerWidget {
             _showFeedbackDetails(context, feedback, service);
           },
           borderRadius: BorderRadius.circular(18),
-          splashColor: const Color(0xFF10B981).withOpacity(0.08),
-          highlightColor: const Color(0xFF059669).withOpacity(0.04),
+          splashColor: AppColors.primaryColor.withOpacity(0.08),
+          highlightColor: AppColors.primaryColor.withOpacity(0.04),
           child: Padding(
             padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
             child: Column(
@@ -360,14 +360,14 @@ class FeedbacksScreen extends ConsumerWidget {
                                   const Color(0xFFA7F3D0),
                                 ]
                               : [
-                                  const Color(0xFF10B981),
-                                  const Color(0xFF059669),
+                            AppColors.primaryColor,
+                            AppColors.primaryColor,
                                 ],
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF10B981).withOpacity(0.2),
+                            color: AppColors.primaryColor.withOpacity(0.2),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -376,7 +376,7 @@ class FeedbacksScreen extends ConsumerWidget {
                       child: Icon(
                         Icons.person_rounded,
                         color: feedback.isRead
-                            ? const Color(0xFF059669)
+                            ? AppColors.primaryColor
                             : Colors.white,
                         size: isSmallScreen ? 24 : 28,
                       ),
@@ -396,7 +396,7 @@ class FeedbacksScreen extends ConsumerWidget {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: isSmallScreen ? 15 : 17,
-                                    color: const Color(0xFF047857),
+                                    color: AppColors.primaryColor,
                                     height: 1.2,
                                   ),
                                   maxLines: 1,
@@ -411,18 +411,16 @@ class FeedbacksScreen extends ConsumerWidget {
                                     vertical: 3,
                                   ),
                                   decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
+                                    gradient:  LinearGradient(
                                       colors: [
-                                        Color(0xFF10B981),
-                                        Color(0xFF059669),
+                                        AppColors.primaryColor,
+                                        AppColors.primaryColor,
                                       ],
                                     ),
                                     borderRadius: BorderRadius.circular(12),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: const Color(
-                                          0xFF10B981,
-                                        ).withOpacity(0.3),
+                                        color: AppColors.primaryColor.withOpacity(0.3),
                                         blurRadius: 4,
                                         offset: const Offset(0, 2),
                                       ),
@@ -463,10 +461,10 @@ class FeedbacksScreen extends ConsumerWidget {
                         vertical: isSmallScreen ? 4 : 6,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF10B981).withOpacity(0.1),
+                        color: AppColors.primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: const Color(0xFF10B981).withOpacity(0.2),
+                          color: AppColors.primaryColor.withOpacity(0.2),
                           width: 1,
                         ),
                       ),
@@ -476,13 +474,13 @@ class FeedbacksScreen extends ConsumerWidget {
                           Icon(
                             Icons.access_time_rounded,
                             size: isSmallScreen ? 12 : 14,
-                            color: const Color(0xFF059669),
+                            color: AppColors.primaryColor,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             timeAgo,
                             style: TextStyle(
-                              color: const Color(0xFF059669),
+                              color: AppColors.primaryColor,
                               fontSize: isSmallScreen ? 10 : 11,
                               fontWeight: FontWeight.w600,
                             ),
@@ -512,13 +510,13 @@ class FeedbacksScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF10B981).withOpacity(0.15),
+                          color: AppColors.primaryColor.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
                           Icons.message_rounded,
                           size: isSmallScreen ? 14 : 16,
-                          color: const Color(0xFF059669),
+                          color:AppColors.primaryColor,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -604,7 +602,7 @@ class FeedbacksScreen extends ConsumerWidget {
                         vertical: isSmallScreen ? 6 : 8,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF10B981).withOpacity(0.1),
+                        color: AppColors.primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -614,7 +612,7 @@ class FeedbacksScreen extends ConsumerWidget {
                             'View Details',
                             style: TextStyle(
                               fontSize: isSmallScreen ? 11 : 12,
-                              color: const Color(0xFF059669),
+                              color: AppColors.primaryColor,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -622,7 +620,7 @@ class FeedbacksScreen extends ConsumerWidget {
                           Icon(
                             Icons.arrow_forward_rounded,
                             size: isSmallScreen ? 14 : 16,
-                            color: const Color(0xFF059669),
+                            color: AppColors.primaryColor,
                           ),
                         ],
                       ),

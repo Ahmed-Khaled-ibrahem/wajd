@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:wajd/models/report_model.dart';
+import '../../../app/const/colors.dart';
 import '../../../providers/report_provider.dart';
 
 class CaseTrackingWidget extends ConsumerWidget {
@@ -79,8 +80,8 @@ class CaseTrackingWidget extends ConsumerWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    gradient:  LinearGradient(
+                      colors: AppColors.gradientColor,
                     ),
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -112,7 +113,7 @@ class CaseTrackingWidget extends ConsumerWidget {
           icon: const Icon(Icons.history_rounded, size: 18),
           label: const Text('View All'),
           style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF10B981),
+            foregroundColor: AppColors.primaryColor,
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
         ),
@@ -176,8 +177,8 @@ class CaseTrackingWidget extends ConsumerWidget {
               color: isDark ? const Color(0xFF1F2937) : Colors.grey[100],
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Center(
-              child: CircularProgressIndicator(color: Color(0xFF10B981)),
+            child:  Center(
+              child: CircularProgressIndicator(color:AppColors.primaryColor),
             ),
           ),
         ),
@@ -225,20 +226,20 @@ class CaseTrackingWidget extends ConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF10B981).withOpacity(0.05),
-            const Color(0xFF059669).withOpacity(0.02),
+            AppColors.primaryColor.withOpacity(0.05),
+            AppColors.primaryColor.withOpacity(0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF10B981).withOpacity(0.2)),
+        border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
       ),
       child: Column(
         children: [
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               shape: BoxShape.circle,
             ),
@@ -254,31 +255,33 @@ class CaseTrackingWidget extends ConsumerWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: isDark ? Colors.white : const Color(0xFF047857),
+              color: isDark ? Colors.white : AppColors.primaryColor,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Your case reports will appear here',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
+              fontWeight: FontWeight.w500,
               color: isDark ? Colors.grey[400] : const Color(0xFF6B7280),
             ),
           ),
-          const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: () => context.push('/report-my-child'),
-            icon: const Icon(Icons.add_rounded),
-            label: const Text('Create Report'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
+          // const SizedBox(height: 20),
+          // ElevatedButton.icon(
+          //   onPressed: () => context.push('/report-my-child'),
+          //   icon: const Icon(Icons.add_rounded),
+          //   label: const Text('Create Report'),
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: const Color(0xFF10B981),
+          //     foregroundColor: Colors.white,
+          //     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(12),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -348,7 +351,7 @@ class CaseTrackingWidget extends ConsumerWidget {
                               fontWeight: FontWeight.bold,
                               color: isDark
                                   ? Colors.white
-                                  : const Color(0xFF047857),
+                                  : AppColors.primaryColor,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -436,7 +439,7 @@ class CaseTrackingWidget extends ConsumerWidget {
                         Icon(
                           Icons.access_time_rounded,
                           size: isSmallScreen ? 14 : 16,
-                          color: const Color(0xFF10B981),
+                          color: AppColors.primaryColor,
                         ),
                         const SizedBox(width: 6),
                         Text(
@@ -524,7 +527,7 @@ class CaseTrackingWidget extends ConsumerWidget {
                         ),
                       ),
                       style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xFF10B981),
+                        foregroundColor: AppColors.primaryColor,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 4,
@@ -675,7 +678,7 @@ class CaseTrackingWidget extends ConsumerWidget {
   Color _getStatusColor(ReportStatus status) {
     switch (status) {
       case ReportStatus.closed:
-        return const Color(0xFF10B981); // Green
+        return AppColors.primaryColor; // Green
       case ReportStatus.inProgress:
         return const Color(0xFFF59E0B); // Amber
       case ReportStatus.open:

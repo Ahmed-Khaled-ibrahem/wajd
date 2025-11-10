@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,12 +67,12 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
           color: isDark ? const Color(0xFF1F2937) : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: const Color(0xFF10B981).withOpacity(0.2),
+            color: AppColors.primaryColor.withOpacity(0.2),
             width: 2,
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF10B981).withOpacity(0.1),
+              color: AppColors.primaryColor.withOpacity(0.1),
               blurRadius: 20,
               offset: const Offset(0, 8),
               spreadRadius: 0,
@@ -88,15 +87,15 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
               Container(
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
+                  gradient:  LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    colors: AppColors.gradientColor,
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF10B981).withOpacity(0.3),
+                      color: AppColors.primaryColor.withOpacity(0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -134,8 +133,8 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF10B981), Color(0xFF059669)],
+                        gradient:  LinearGradient(
+                          colors: AppColors.gradientColor,
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -164,7 +163,7 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
                     Text(
                       'Your Children, Our Safety.'.tr(),
                       style: TextStyle(
-                        color: isDark ? Colors.white : const Color(0xFF047857),
+                        color: isDark ? Colors.white : AppColors.primaryColor,
                         fontSize: isSmallScreen ? 15 : 17,
                         fontWeight: FontWeight.bold,
                         letterSpacing: -0.5,
@@ -205,10 +204,10 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
             width: 4,
             height: 20,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient:  LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(2),
             ),
@@ -219,7 +218,8 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
             style: TextStyle(
               fontSize: isSmallScreen ? 16 : 18,
               fontWeight: FontWeight.bold,
-              color: const Color(0xFF047857),
+              // color: const Color(0xFF047857),
+              color: AppColors.primaryColor,
               letterSpacing: -0.5,
             ),
           ),
@@ -358,14 +358,14 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
-        gradient: const LinearGradient(
+        gradient:  LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
+          colors: AppColors.gradientColor,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.3),
+            color: AppColors.primaryColor.withOpacity(0.3),
             blurRadius: 20,
             offset: const Offset(0, 8),
             spreadRadius: 2,
@@ -455,7 +455,7 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: const Color(0xFF10B981).withOpacity(0.2),
+              color: AppColors.primaryColor.withOpacity(0.2),
               width: 1.5,
             ),
             boxShadow: [
@@ -473,10 +473,10 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
               Container(
                 padding: EdgeInsets.all(isSmallScreen ? 20 : 24),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
+                  gradient:  LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                    colors: AppColors.gradientColor,
                   ),
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(24),
@@ -581,7 +581,7 @@ class _ParentHomeScreenState extends ConsumerState<ParentHomeScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(
-                          color: const Color(0xFF10B981).withOpacity(0.3),
+                          color: AppColors.primaryColor.withOpacity(0.3),
                           width: 1,
                         ),
                       ),

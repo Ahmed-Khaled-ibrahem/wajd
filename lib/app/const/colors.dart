@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class AppColors{
   static Color backgroundColor = const Color(0xFFc8e6c9);
   static Color primaryColor = const Color(0xFF577438);
+  static List<Color> gradientColor = [Color(0xFF8BB65D), Color(0xFF577438)];
+  // static List<Color> gradientColor = [Color(0xFF10B981), Color(0xFF059669)];
 
 
 

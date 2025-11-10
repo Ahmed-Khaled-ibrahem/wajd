@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:wajd/features/staff/reports/similar_card.dart';
 import 'package:wajd/models/report_model.dart';
+import '../../../app/const/colors.dart';
+import '../../../models/notification_model.dart';
 import '../../../models/user_profile.dart';
+import '../../../providers/notifi_provider.dart';
 import '../../../providers/report_provider.dart';
 import '../../../services/supabase_cleint.dart';
 import '../../login/controller/current_profile_provider.dart';
@@ -33,8 +37,8 @@ class _ViewReportDetailsScreenState
           ? const Color(0xFF0F172A)
           : const Color(0xFFF9FAFB),
       body: reportAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: Color(0xFF10B981)),
+        loading: () => Center(
+          child: CircularProgressIndicator(color: AppColors.primaryColor),
         ),
         error: (error, stack) => _buildErrorState(error, isDark),
         data: (report) {
@@ -190,7 +194,10 @@ class _ViewReportDetailsScreenState
                     const SizedBox(height: 16),
                   ],
                   _buildActionButtons(report, isDark, isSmallScreen),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 5),
+                  SimilarReportsCard(
+                    currentReport: report,
+                  ),
                 ]),
           ),
         ),
@@ -352,14 +359,14 @@ class _ViewReportDetailsScreenState
         children: [
           Row(
             children: [
-              Icon(icon, color: const Color(0xFF10B981), size: 24),
+              Icon(icon, color: AppColors.primaryColor, size: 24),
               const SizedBox(width: 12),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: isSmallScreen ? 16 : 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF047857),
+                  color: isDark ? Colors.white : AppColors.primaryColor,
                 ),
               ),
             ],
@@ -377,7 +384,7 @@ class _ViewReportDetailsScreenState
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 18, color: const Color(0xFF10B981)),
+          Icon(icon, size: 18, color: AppColors.primaryColor),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -430,9 +437,9 @@ class _ViewReportDetailsScreenState
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.photo_library_rounded,
-                color: Color(0xFF10B981),
+                color: AppColors.primaryColor,
                 size: 24,
               ),
               const SizedBox(width: 12),
@@ -441,7 +448,7 @@ class _ViewReportDetailsScreenState
                 style: TextStyle(
                   fontSize: isSmallScreen ? 16 : 18,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : const Color(0xFF047857),
+                  color: isDark ? Colors.white : AppColors.primaryColor,
                 ),
               ),
             ],
@@ -464,10 +471,10 @@ class _ViewReportDetailsScreenState
                   imageUrl: allImages[index],
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
-                    color: const Color(0xFF10B981).withOpacity(0.1),
-                    child: const Center(
+                    color: AppColors.primaryColor.withOpacity(0.1),
+                    child: Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFF10B981),
+                        color: AppColors.primaryColor,
                       ),
                     ),
                   ),
@@ -488,7 +495,7 @@ class _ViewReportDetailsScreenState
     final currentUser = ref.read(currentUserProvider);
     final currentUserData = ref.read(currentUserProfileProvider);
     final isAssignedToMe = report.assignedStaffId == currentUser?.id;
-    if( currentUserData?.role == UserRole.parent ){
+    if (currentUserData?.role == UserRole.parent) {
       return Container();
     }
     return Column(
@@ -521,8 +528,8 @@ class _ViewReportDetailsScreenState
                   icon: const Icon(Icons.swap_horiz_rounded),
                   label: const Text('Change Status'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFF10B981),
-                    side: const BorderSide(color: Color(0xFF10B981)),
+                    foregroundColor: AppColors.primaryColor,
+                    side: BorderSide(color: AppColors.primaryColor),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -540,7 +547,7 @@ class _ViewReportDetailsScreenState
                     icon: const Icon(Icons.check_circle_rounded),
                     label: const Text('Close Report'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF10B981),
+                      backgroundColor: AppColors.primaryColor,
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -586,7 +593,7 @@ class _ViewReportDetailsScreenState
               icon: const Icon(Icons.refresh_rounded),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
               ),
             ),
@@ -625,7 +632,7 @@ class _ViewReportDetailsScreenState
               icon: const Icon(Icons.arrow_back),
               label: const Text('Go Back'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
               ),
             ),
@@ -675,9 +682,9 @@ class _ViewReportDetailsScreenState
       ref.invalidate(reportByIdProvider(widget.reportId));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Report assigned to you successfully'),
-            backgroundColor: Color(0xFF10B981),
+            backgroundColor: AppColors.primaryColor,
           ),
         );
       }
@@ -721,7 +728,7 @@ class _ViewReportDetailsScreenState
               ReportStatus.closed,
               'Closed',
               Icons.check_circle_rounded,
-              const Color(0xFF10B981),
+              AppColors.primaryColor,
             ),
             _buildStatusOption(
               report,
@@ -748,13 +755,16 @@ class _ViewReportDetailsScreenState
       leading: Icon(icon, color: color),
       title: Text(label),
       trailing: isCurrentStatus
-          ? const Icon(Icons.check_rounded, color: Color(0xFF10B981))
+          ? Icon(Icons.check_rounded, color: AppColors.primaryColor)
           : null,
       onTap: isCurrentStatus
           ? null
           : () async {
-              Navigator.pop(context);
+              context.pop();
               await _changeStatus(report, status);
+              ref.invalidate(allReportsProvider);
+              await ref.read(allReportsProvider.future);
+              context.pop();
             },
     );
   }
@@ -765,11 +775,13 @@ class _ViewReportDetailsScreenState
           .read(reportsProvider.notifier)
           .updateReportStatus(report.id, newStatus.name);
       ref.invalidate(reportByIdProvider(widget.reportId));
+      await notifyParentStatus(report.reporterId, newStatus.name);
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Status changed to ${_getStatusText(newStatus)}'),
-            backgroundColor: const Color(0xFF10B981),
+            backgroundColor: AppColors.primaryColor,
           ),
         );
       }
@@ -818,11 +830,11 @@ class _ViewReportDetailsScreenState
           ),
           ElevatedButton(
             onPressed: () async {
-              Navigator.pop(context);
+              context.pop();
               await _closeReport(report, notesController.text);
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
             ),
             child: const Text('Close Report'),
@@ -832,15 +844,39 @@ class _ViewReportDetailsScreenState
     );
   }
 
+  notifyParent(parentId) {
+    ref
+        .read(notificationsProvider.notifier)
+        .createNotification(
+          userId: parentId,
+          type: NotificationType.reportUpdated,
+          title: 'your report has been closed',
+          message:
+              'your report has been closed by our team , we are going to get contact with you soon',
+        );
+  }
+
+  notifyParentStatus(parentId, status) {
+    ref
+        .read(notificationsProvider.notifier)
+        .createNotification(
+          userId: parentId,
+          type: NotificationType.reportUpdated,
+          title: 'your report status has been changed to $status',
+          message: 'your report status has been changed to $status by our team',
+        );
+  }
+
   Future<void> _closeReport(Report report, String notes) async {
     try {
       await ref.read(reportsProvider.notifier).closeReport(report.id, notes);
+      await notifyParent(report.reporterId);
       ref.invalidate(reportByIdProvider(widget.reportId));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('Report closed successfully'),
-            backgroundColor: Color(0xFF10B981),
+            backgroundColor: AppColors.primaryColor,
           ),
         );
       }
@@ -863,7 +899,7 @@ class _ViewReportDetailsScreenState
       case ReportStatus.inProgress:
         return const Color(0xFFF59E0B);
       case ReportStatus.closed:
-        return const Color(0xFF10B981);
+        return AppColors.primaryColor;
       case ReportStatus.cancelled:
         return const Color(0xFF6B7280);
     }

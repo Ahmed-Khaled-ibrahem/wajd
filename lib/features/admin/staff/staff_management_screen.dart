@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../app/const/colors.dart';
 import '../../../models/user_profile.dart';
 import '../../../providers/staff_management_provider.dart';
 
@@ -39,7 +40,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                 decoration: InputDecoration(
                   labelText: 'Email Address',
                   hintText: 'user@example.com',
-                  prefixIcon: const Icon(Icons.email_rounded, color: Color(0xFF10B981)),
+                  prefixIcon:  Icon(Icons.email_rounded, color: AppColors.primaryColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -53,8 +54,8 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
               ),
               if (isLoading) ...[
                 const SizedBox(height: 16),
-                const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                 Center(
+                  child: CircularProgressIndicator(color: AppColors.primaryColor),
                 ),
               ],
             ],
@@ -117,7 +118,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                       }
                     },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF10B981),
+                backgroundColor: AppColors.primaryColor,
                 foregroundColor: Colors.white,
               ),
               child: const Text('Add Staff'),
@@ -155,7 +156,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
             ListTile(
               leading: Icon(
                 isActive ? Icons.pause_circle_outline : Icons.play_circle_outline,
-                color: isActive ? const Color(0xFFF59E0B) : const Color(0xFF10B981),
+                color: isActive ? const Color(0xFFF59E0B) : AppColors.primaryColor,
               ),
               title: Text(isActive ? 'Suspend Account' : 'Activate Account'),
               onTap: () {
@@ -230,7 +231,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
               onChanged: (value) => setState(() => _searchQuery = value),
               decoration: InputDecoration(
                 hintText: 'Search staff by name or email...',
-                prefixIcon: const Icon(Icons.search_rounded, color: Color(0xFF10B981)),
+                prefixIcon:  Icon(Icons.search_rounded, color: AppColors.primaryColor),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear_rounded),
@@ -252,8 +253,8 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
           // Staff List
           Expanded(
             child: staffAsync.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(color: Color(0xFF10B981)),
+              loading: () =>  Center(
+                child: CircularProgressIndicator(color: AppColors.primaryColor),
               ),
               error: (error, stack) => Center(
                 child: Column(
@@ -285,7 +286,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                       icon: const Icon(Icons.refresh_rounded),
                       label: const Text('Retry'),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF10B981),
+                        backgroundColor: AppColors.primaryColor,
                         foregroundColor: Colors.white,
                       ),
                     ),
@@ -345,7 +346,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                   onRefresh: () async {
                     ref.invalidate(staffManagementProvider);
                   },
-                  color: const Color(0xFF10B981),
+                  color: AppColors.primaryColor,
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: filteredStaff.length,
@@ -370,7 +371,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                           leading: CircleAvatar(
                             radius: 24,
                             backgroundColor: isActive
-                                ? const Color(0xFF10B981)
+                                ? AppColors.primaryColor
                                 : const Color(0xFF6B7280),
                             child: Text(
                               staff.name[0].toUpperCase(),
@@ -428,12 +429,12 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                                 ),
                                 decoration: BoxDecoration(
                                   color: isActive
-                                      ? const Color(0xFF10B981).withOpacity(0.1)
+                                      ? AppColors.primaryColor.withOpacity(0.1)
                                       : const Color(0xFFF59E0B).withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
                                     color: isActive
-                                        ? const Color(0xFF10B981)
+                                        ? AppColors.primaryColor
                                         : const Color(0xFFF59E0B),
                                     width: 1.5,
                                   ),
@@ -447,7 +448,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                                           : Icons.pause_circle_rounded,
                                       size: 14,
                                       color: isActive
-                                          ? const Color(0xFF10B981)
+                                          ? AppColors.primaryColor
                                           : const Color(0xFFF59E0B),
                                     ),
                                     const SizedBox(width: 4),
@@ -457,7 +458,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                         color: isActive
-                                            ? const Color(0xFF10B981)
+                                            ? AppColors.primaryColor
                                             : const Color(0xFFF59E0B),
                                       ),
                                     ),
@@ -495,7 +496,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                 ? '${user.name} has been promoted to staff'
                 : 'Failed to convert user to staff',
           ),
-          backgroundColor: success ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          backgroundColor: success ? AppColors.primaryColor : const Color(0xFFEF4444),
         ),
       );
     }
@@ -513,7 +514,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                 ? '${staff.name} has been activated'
                 : 'Failed to activate staff member',
           ),
-          backgroundColor: success ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          backgroundColor: success ? AppColors.primaryColor : const Color(0xFFEF4444),
         ),
       );
     }
@@ -531,7 +532,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                 ? '${staff.name} has been suspended'
                 : 'Failed to suspend staff member',
           ),
-          backgroundColor: success ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          backgroundColor: success ? AppColors.primaryColor : const Color(0xFFEF4444),
         ),
       );
     }
@@ -579,7 +580,7 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                 ? '${staff.name} has been converted to parent'
                 : 'Failed to convert staff to parent',
           ),
-          backgroundColor: success ? const Color(0xFF10B981) : const Color(0xFFEF4444),
+          backgroundColor: success ? AppColors.primaryColor : const Color(0xFFEF4444),
         ),
       );
     }

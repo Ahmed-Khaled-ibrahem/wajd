@@ -215,17 +215,17 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF10B981).withOpacity(0.03),
-            const Color(0xFF059669).withOpacity(0.01),
+            AppColors.primaryColor.withOpacity(0.03),
+            AppColors.primaryColor.withOpacity(0.01),
           ],
         ),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.15),
+          color: AppColors.primaryColor.withOpacity(0.15),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.05),
+            color: AppColors.primaryColor.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -236,8 +236,8 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
         child: Theme(
           data: Theme.of(context).copyWith(
             dividerColor: Colors.transparent,
-            splashColor: const Color(0xFF10B981).withOpacity(0.05),
-            highlightColor: const Color(0xFF059669).withOpacity(0.03),
+            splashColor: AppColors.primaryColor.withOpacity(0.05),
+            highlightColor: AppColors.primaryColor.withOpacity(0.03),
           ),
           child: ExpansionTile(
             tilePadding: EdgeInsets.symmetric(
@@ -253,15 +253,15 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
             leading: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
+                gradient:  LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF10B981), Color(0xFF059669)],
+                  colors: AppColors.gradientColor,
                 ),
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF10B981).withOpacity(0.3),
+                    color: AppColors.primaryColor.withOpacity(0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -278,24 +278,24 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: isSmallScreen ? 14 : 16,
-                color: const Color(0xFF047857),
+                color: AppColors.primaryColor,
                 height: 1.4,
               ),
             ),
             trailing: Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.1),
+                color:AppColors.primaryColor.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.keyboard_arrow_down_rounded,
-                color: const Color(0xFF059669),
+                color: AppColors.primaryColor,
                 size: isSmallScreen ? 20 : 24,
               ),
             ),
-            iconColor: const Color(0xFF059669),
-            collapsedIconColor: const Color(0xFF10B981),
+            iconColor: AppColors.primaryColor,
+            collapsedIconColor: AppColors.primaryColor,
             children: [
               Container(
                 padding: EdgeInsets.all(isSmallScreen ? 14 : 16),
@@ -303,7 +303,7 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
                   color: const Color(0xFFF0FDF4), // Very light green
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    color: AppColors.primaryColor.withOpacity(0.1),
                     width: 1,
                   ),
                 ),
@@ -314,13 +314,13 @@ class _HelpAndSupportScreenState extends ConsumerState<HelpAndSupportScreen> {
                       margin: const EdgeInsets.only(top: 2, right: 12),
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF10B981).withOpacity(0.15),
+                        color: AppColors.primaryColor.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Icon(
                         Icons.lightbulb_outline_rounded,
                         size: isSmallScreen ? 14 : 16,
-                        color: const Color(0xFF059669),
+                        color: AppColors.primaryColor,
                       ),
                     ),
                     Expanded(

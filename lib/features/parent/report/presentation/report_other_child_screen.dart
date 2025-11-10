@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wajd/models/report_model.dart';
 import 'package:wajd/services/supabase_cleint.dart';
+import '../../../../app/const/colors.dart';
 import '../../../../providers/report_provider.dart';
 
 class ReportOtherChildScreen extends ConsumerStatefulWidget {
@@ -158,7 +159,7 @@ class _ReportOtherChildScreenState
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
             ),
             child: const Text('Open Settings'),
@@ -201,7 +202,7 @@ class _ReportOtherChildScreenState
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
             ),
             child: const Text('Open Settings'),
@@ -269,7 +270,7 @@ class _ReportOtherChildScreenState
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           border: Border.all(
-            color: const Color(0xFF10B981).withOpacity(0.2),
+            color: AppColors.primaryColor.withOpacity(0.2),
             width: 1.5,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -279,8 +280,8 @@ class _ReportOtherChildScreenState
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF10B981), Color(0xFF059669)],
+                gradient:  LinearGradient(
+                  colors: AppColors.gradientColor,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -321,8 +322,8 @@ class _ReportOtherChildScreenState
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF10B981),
+            colorScheme:  ColorScheme.light(
+              primary: AppColors.primaryColor,
               onPrimary: Colors.white,
             ),
           ),
@@ -338,8 +339,8 @@ class _ReportOtherChildScreenState
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: Color(0xFF10B981),
+              colorScheme:  ColorScheme.light(
+                primary: AppColors.primaryColor,
                 onPrimary: Colors.white,
               ),
             ),
@@ -409,7 +410,7 @@ class _ReportOtherChildScreenState
         childName: _nameController.text.trim().isNotEmpty
             ? _nameController.text.trim()
             : 'Unknown Child',
-        childAge: int.parse(_ageController.text),
+        childAge: int.tryParse(_ageController.text) ?? 0,
         childGender: _selectedGender!,
         childDescription: _descriptionController.text.trim(),
         lastSeenLocation: _lastSeenLocationController.text.trim(),
@@ -469,8 +470,8 @@ class _ReportOtherChildScreenState
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF10B981), Color(0xFF059669)],
+                gradient:  LinearGradient(
+                  colors: AppColors.gradientColor,
                 ),
                 shape: BoxShape.circle,
               ),
@@ -502,7 +503,7 @@ class _ReportOtherChildScreenState
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF10B981),
+              backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
               minimumSize: const Size(double.infinity, 48),
               shape: RoundedRectangleBorder(
@@ -531,7 +532,7 @@ class _ReportOtherChildScreenState
         ),
         backgroundColor: isError
             ? const Color(0xFFEF4444)
-            : const Color(0xFF10B981),
+            : AppColors.primaryColor,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
@@ -683,10 +684,10 @@ class _ReportOtherChildScreenState
           width: 4,
           height: 24,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient:  LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0xFF10B981), Color(0xFF059669)],
+              colors: AppColors.gradientColor,
             ),
             borderRadius: BorderRadius.circular(2),
           ),
@@ -697,7 +698,7 @@ class _ReportOtherChildScreenState
           style: TextStyle(
             fontSize: isSmallScreen ? 17 : 19,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF047857),
+            color: AppColors.primaryColor,
           ),
         ),
       ],
@@ -712,7 +713,7 @@ class _ReportOtherChildScreenState
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFF10B981).withOpacity(0.3),
+            color: AppColors.primaryColor.withOpacity(0.3),
             width: 2,
           ),
           color: isDark ? const Color(0xFF1F2937) : const Color(0xFFF9FAFB),
@@ -754,8 +755,8 @@ class _ReportOtherChildScreenState
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF10B981), Color(0xFF059669)],
+                      gradient:  LinearGradient(
+                        colors: AppColors.gradientColor,
                       ),
                       shape: BoxShape.circle,
                     ),
@@ -771,7 +772,7 @@ class _ReportOtherChildScreenState
                     style: TextStyle(
                       fontSize: isSmallScreen ? 14 : 15,
                       fontWeight: FontWeight.w600,
-                      color: const Color(0xFF047857),
+                      color: AppColors.primaryColor,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -793,7 +794,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color:AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -806,8 +807,8 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -832,7 +833,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color:AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -840,14 +841,14 @@ class _ReportOtherChildScreenState
         controller: _ageController,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          labelText: 'Age *',
+          labelText: 'Age ',
           hintText: 'Est. age',
           prefixIcon: Container(
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -863,16 +864,16 @@ class _ReportOtherChildScreenState
             vertical: 16,
           ),
         ),
-        validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'Required';
-          }
-          final age = int.tryParse(value);
-          if (age == null || age < 0 || age > 18) {
-            return 'Invalid age';
-          }
-          return null;
-        },
+        // validator: (value) {
+        //   if (value == null || value.trim().isEmpty) {
+        //     return 'Required';
+        //   }
+        //   final age = int.tryParse(value);
+        //   if (age == null || age < 0 || age > 18) {
+        //     return 'Invalid age';
+        //   }
+        //   return null;
+        // },
       ),
     );
   }
@@ -882,7 +883,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -894,8 +895,8 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -920,7 +921,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -929,8 +930,8 @@ class _ReportOtherChildScreenState
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF10B981), Color(0xFF059669)],
+            gradient:  LinearGradient(
+              colors: AppColors.gradientColor,
             ),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -946,15 +947,15 @@ class _ReportOtherChildScreenState
         ),
         subtitle: Text(
           DateFormat('MMM dd, yyyy - hh:mm a').format(_lastSeenTime),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF047857),
+            color: AppColors.primaryColor,
           ),
         ),
-        trailing: const Icon(
+        trailing:  Icon(
           Icons.edit_calendar_rounded,
-          color: Color(0xFF10B981),
+          color: AppColors.primaryColor,
         ),
       ),
     );
@@ -965,7 +966,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -980,8 +981,8 @@ class _ReportOtherChildScreenState
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF10B981), Color(0xFF059669)],
+                  gradient:  LinearGradient(
+                    colors: AppColors.gradientColor,
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -1005,7 +1006,7 @@ class _ReportOtherChildScreenState
             },
           ),
           if (_isLoadingLocation)
-            const Padding(
+             Padding(
               padding: EdgeInsets.all(12),
               child: Row(
                 children: [
@@ -1014,7 +1015,7 @@ class _ReportOtherChildScreenState
                     height: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: Color(0xFF10B981),
+                      color: AppColors.primaryColor,
                     ),
                   ),
                   SizedBox(width: 12),
@@ -1029,7 +1030,7 @@ class _ReportOtherChildScreenState
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFF10B981).withOpacity(0.05),
+                color:AppColors.primaryColor.withOpacity(0.05),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(14),
                   bottomRight: Radius.circular(14),
@@ -1037,18 +1038,18 @@ class _ReportOtherChildScreenState
               ),
               child: Row(
                 children: [
-                  const Icon(
+                   Icon(
                     Icons.check_circle_rounded,
                     size: 16,
-                    color: Color(0xFF10B981),
+                    color: AppColors.primaryColor,
                   ),
                   const SizedBox(width: 8),
-                  const Expanded(
+                   Expanded(
                     child: Text(
                       'Location captured',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF059669),
+                        color: AppColors.primaryColor,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1070,7 +1071,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -1084,8 +1085,8 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1119,7 +1120,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -1133,8 +1134,8 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1159,7 +1160,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -1173,8 +1174,8 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1205,7 +1206,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -1219,8 +1220,8 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF10B981), Color(0xFF059669)],
+              gradient:  LinearGradient(
+                colors: AppColors.gradientColor,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1243,13 +1244,13 @@ class _ReportOtherChildScreenState
   Widget _buildSubmitButton(bool isSmallScreen) {
     return Container(
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF10B981), Color(0xFF059669)],
+        gradient:  LinearGradient(
+          colors: AppColors.gradientColor,
         ),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.4),
+            color: AppColors.primaryColor.withOpacity(0.4),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

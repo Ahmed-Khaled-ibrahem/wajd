@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../app/const/colors.dart';
 import '../../../models/auth_state.dart';
 import '../../login/controller/auth_controller.dart';
 import '../../login/controller/current_profile_provider.dart';
@@ -74,15 +75,15 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient:  LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFF10B981), Color(0xFF059669)],
+            colors: AppColors.gradientColor,
           ),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF10B981).withOpacity(0.3),
+              color: AppColors.primaryColor.withOpacity(0.3),
               blurRadius: 20,
               offset: const Offset(0, 10),
               spreadRadius: 0,
@@ -219,12 +220,12 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF10B981).withOpacity(0.05),
-            const Color(0xFF059669).withOpacity(0.02),
+            AppColors.primaryColor.withOpacity(0.05),
+            AppColors.primaryColor.withOpacity(0.02),
           ],
         ),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.2),
+          color: AppColors.primaryColor.withOpacity(0.2),
           width: 1.5,
         ),
       ),
@@ -233,8 +234,8 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
-          splashColor: const Color(0xFF10B981).withOpacity(0.1),
-          highlightColor: const Color(0xFF059669).withOpacity(0.05),
+          splashColor: AppColors.primaryColor.withOpacity(0.1),
+          highlightColor: AppColors.primaryColor.withOpacity(0.05),
           child: Padding(
             padding: EdgeInsets.all(isSmallScreen ? 12 : 28.0),
             child: Column(
@@ -244,18 +245,18 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
                 Container(
                   padding: EdgeInsets.all(isSmallScreen ? 14 : 18),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                    gradient:  LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xFF10B981), // Emerald-500
-                        Color(0xFF059669), // Emerald-600
+                        AppColors.primaryColor, // Emerald-500
+                        AppColors.primaryColor, // Emerald-600
                       ],
                     ),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF10B981).withOpacity(0.3),
+                        color: AppColors.primaryColor.withOpacity(0.3),
                         blurRadius: 16,
                         offset: const Offset(0, 4),
                         spreadRadius: 2,
@@ -275,7 +276,7 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
                   style: TextStyle(
                     fontSize: isSmallScreen ? 18 : 22,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF047857),
+                    color: AppColors.primaryColor,
                     // Emerald-700
                     letterSpacing: -0.5,
                     height: 1.2,
@@ -306,7 +307,7 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    color: AppColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -316,7 +317,7 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
                         'Tap to explore',
                         style: TextStyle(
                           fontSize: isSmallScreen ? 11 : 12,
-                          color: const Color(0xFF059669),
+                          color: AppColors.primaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -324,7 +325,7 @@ class _StaffHomeScreenState extends ConsumerState<StaffHomeScreen> {
                       Icon(
                         Icons.arrow_forward_rounded,
                         size: isSmallScreen ? 14 : 16,
-                        color: const Color(0xFF059669),
+                        color: AppColors.primaryColor,
                       ),
                     ],
                   ),

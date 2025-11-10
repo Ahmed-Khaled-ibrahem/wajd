@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -141,12 +140,12 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF10B981).withOpacity(0.05),
-            const Color(0xFF059669).withOpacity(0.02),
+            AppColors.primaryColor.withOpacity(0.05),
+            AppColors.primaryColor.withOpacity(0.02),
           ],
         ),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.2),
+          color: AppColors.primaryColor.withOpacity(0.2),
           width: 1.5,
         ),
       ),
@@ -155,8 +154,8 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
-          splashColor: const Color(0xFF10B981).withOpacity(0.1),
-          highlightColor: const Color(0xFF059669).withOpacity(0.05),
+          splashColor: AppColors.primaryColor.withOpacity(0.1),
+          highlightColor: AppColors.primaryColor.withOpacity(0.05),
           child: Padding(
             padding: EdgeInsets.all(isSmallScreen ? 12: 28.0),
             child: Column(
@@ -166,18 +165,18 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
                 Container(
                   padding: EdgeInsets.all(isSmallScreen ? 14 : 18),
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                    gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Color(0xFF10B981), // Emerald-500
-                        Color(0xFF059669), // Emerald-600
+                        AppColors.primaryColor, // Emerald-500
+                        AppColors.primaryColor, // Emerald-600
                       ],
                     ),
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF10B981).withOpacity(0.3),
+                        color: AppColors.primaryColor.withOpacity(0.3),
                         blurRadius: 16,
                         offset: const Offset(0, 4),
                         spreadRadius: 2,
@@ -197,7 +196,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
                   style: TextStyle(
                     fontSize: isSmallScreen ? 18 : 22,
                     fontWeight: FontWeight.bold,
-                    color: const Color(0xFF047857), // Emerald-700
+                    color: AppColors.primaryColor, // Emerald-700
                     letterSpacing: -0.5,
                     height: 1.2,
                   ),
@@ -224,7 +223,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    color: AppColors.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -234,7 +233,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
                         'Tap to explore',
                         style: TextStyle(
                           fontSize: isSmallScreen ? 11 : 12,
-                          color: const Color(0xFF059669),
+                          color: AppColors.primaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -242,7 +241,7 @@ class _AdminHomeScreenState extends ConsumerState<AdminHomeScreen> {
                       Icon(
                         Icons.arrow_forward_rounded,
                         size: isSmallScreen ? 14 : 16,
-                        color: const Color(0xFF059669),
+                        color: AppColors.primaryColor,
                       ),
                     ],
                   ),

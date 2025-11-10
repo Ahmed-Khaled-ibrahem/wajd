@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wajd/models/child_model.dart';
 import 'package:wajd/services/supabase_cleint.dart';
+import '../../../app/const/colors.dart';
 import '../../../providers/cheldren_provider.dart';
 
 class ChildrenListScreen extends ConsumerStatefulWidget {
@@ -60,7 +61,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
               ],
             ),
             backgroundColor: success
-                ? const Color(0xFF10B981)
+                ? AppColors.primaryColor
                 : const Color(0xFFEF4444),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
@@ -143,7 +144,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircularProgressIndicator(color: Color(0xFF10B981)),
+               CircularProgressIndicator(color: AppColors.primaryColor),
               const SizedBox(height: 16),
               Text(
                 'Loading children...',
@@ -190,7 +191,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                   icon: const Icon(Icons.refresh_rounded),
                   label: const Text('Try Again'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF10B981),
+                    backgroundColor: AppColors.primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -220,8 +221,8 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            const Color(0xFF10B981).withOpacity(0.1),
-                            const Color(0xFF059669).withOpacity(0.05),
+                            AppColors.primaryColor.withOpacity(0.1),
+                            AppColors.primaryColor.withOpacity(0.05),
                           ],
                         ),
                         shape: BoxShape.circle,
@@ -229,7 +230,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                       child: Icon(
                         Icons.child_care_rounded,
                         size: isSmallScreen ? 64 : 80,
-                        color: const Color(0xFF10B981),
+                        color: AppColors.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -238,7 +239,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                       style: TextStyle(
                         fontSize: isSmallScreen ? 20 : 24,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF047857),
+                        color: AppColors.primaryColor,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -275,7 +276,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
           }
           return RefreshIndicator(
             onRefresh: _loadChildren,
-            color: const Color(0xFF10B981),
+            color: AppColors.primaryColor,
             child: ListView.builder(
               padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
               itemCount: children.length,
@@ -290,7 +291,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
           onPressed: () => context.push('/add-child'),
           icon: const Icon(Icons.add_rounded),
           label: Text(isSmallScreen ? 'Add' : 'Add Child'),
-          backgroundColor: const Color(0xFF10B981),
+          backgroundColor: AppColors.primaryColor,
           foregroundColor: Colors.white,
           elevation: 4,
         ),
@@ -308,12 +309,12 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
         color: isDark ? const Color(0xFF1F2937) : Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF10B981).withOpacity(0.2),
+          color: AppColors.primaryColor.withOpacity(0.2),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF10B981).withOpacity(0.08),
+            color: AppColors.primaryColor.withOpacity(0.08),
             blurRadius: 15,
             offset: const Offset(0, 4),
           ),
@@ -338,14 +339,14 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                       height: isSmallScreen ? 70 : 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: const LinearGradient(
+                        gradient:  LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF10B981), Color(0xFF059669)],
+                          colors: AppColors.gradientColor,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF10B981).withOpacity(0.3),
+                            color: AppColors.primaryColor.withOpacity(0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -367,36 +368,30 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                                   imageUrl: child.imageUrl ?? '',
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => Container(
-                                    color: const Color(
-                                      0xFF10B981,
-                                    ).withOpacity(0.1),
+                                    color: AppColors.primaryColor.withOpacity(0.1),
                                     child: Center(
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        color: const Color(0xFF10B981),
+                                        color: AppColors.primaryColor,
                                       ),
                                     ),
                                   ),
                                   errorWidget: (context, url, error) =>
                                       Container(
-                                        color: const Color(
-                                          0xFF10B981,
-                                        ).withOpacity(0.1),
+                                        color: AppColors.primaryColor.withOpacity(0.1),
                                         child: Icon(
                                           Icons.child_care_rounded,
                                           size: isSmallScreen ? 32 : 36,
-                                          color: const Color(0xFF10B981),
+                                          color: AppColors.primaryColor,
                                         ),
                                       ),
                                 )
                               : Container(
-                                  color: const Color(
-                                    0xFF10B981,
-                                  ).withOpacity(0.1),
+                                  color: AppColors.primaryColor.withOpacity(0.1),
                                   child: Icon(
                                     Icons.child_care_rounded,
                                     size: isSmallScreen ? 32 : 36,
-                                    color: const Color(0xFF10B981),
+                                    color: AppColors.primaryColor,
                                   ),
                                 ),
                         ),
@@ -409,8 +404,8 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF10B981), Color(0xFF059669)],
+                          gradient:  LinearGradient(
+                            colors: AppColors.gradientColor,
                           ),
                           shape: BoxShape.circle,
                           border: Border.all(
@@ -444,7 +439,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                           fontWeight: FontWeight.bold,
                           color: isDark
                               ? Colors.white
-                              : const Color(0xFF047857),
+                              : AppColors.primaryColor,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -485,12 +480,12 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                   icon: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF10B981).withOpacity(0.1),
+                      color: AppColors.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: const Icon(
+                    child:  Icon(
                       Icons.more_vert_rounded,
-                      color: Color(0xFF10B981),
+                      color: AppColors.primaryColor,
                     ),
                   ),
                   shape: RoundedRectangleBorder(
@@ -504,13 +499,13 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
                           Container(
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF10B981).withOpacity(0.1),
+                              color: AppColors.primaryColor.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Icon(
+                            child:  Icon(
                               Icons.edit_rounded,
                               size: 18,
-                              color: Color(0xFF10B981),
+                              color: AppColors.primaryColor,
                             ),
                           ),
                           const SizedBox(width: 12),
@@ -565,7 +560,7 @@ class _ChildrenListScreenState extends ConsumerState<ChildrenListScreen> {
     required bool isSmallScreen,
     Color? color,
   }) {
-    final chipColor = color ?? const Color(0xFF10B981);
+    final chipColor = color ?? AppColors.primaryColor;
 
     return Container(
       padding: EdgeInsets.symmetric(
