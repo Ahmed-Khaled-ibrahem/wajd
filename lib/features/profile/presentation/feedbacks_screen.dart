@@ -66,14 +66,16 @@ class FeedbacksScreen extends ConsumerWidget {
                     .where((feedback) => !feedback.isRead)
                     .length,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(16),
-                itemCount: feedbacks.length,
-                itemBuilder: (context, index) {
-                  final feedback = feedbacks[index];
-                  return _buildFeedbackCard(context, feedback, feedbackService);
-                },
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: feedbacks.length,
+                  itemBuilder: (context, index) {
+                    final feedback = feedbacks[index];
+                    return _buildFeedbackCard(context, feedback, feedbackService);
+                  },
+                ),
               ),
             ],
           );

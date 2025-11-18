@@ -27,7 +27,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -61,75 +61,100 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
           ),
 
           // Tab Bar
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _TabBarDelegate(
-              tabBar: TabBar(
-                controller: _tabController,
-                // indicatorColor: const Color(0xFF10B981),
-                indicatorColor: AppColors.primaryColor,
-                indicatorWeight: 3,
-                labelColor: AppColors.primaryColor,
-                unselectedLabelColor: isDark
-                    ? Colors.grey[400]
-                    : const Color(0xFF6B7280),
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: isSmallScreen ? 14 : 15,
-                ),
-                tabs: [
-                  Tab(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.pending_actions_rounded, size: 18),
-                        const SizedBox(width: 8),
-                        const Text('Active'),
-                        const SizedBox(width: 6),
-                        _buildCountBadge(
-                          statsAsync.maybeWhen(
-                            data: (stats) => stats.open + stats.inProgress,
-                            orElse: () => 0,
-                          ),
-                          const Color(0xFFEF4444),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Tab(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.archive_rounded, size: 18),
-                        const SizedBox(width: 8),
-                        const Text('Archived'),
-                        const SizedBox(width: 6),
-                        // _buildCountBadge(
-                        //   statsAsync.maybeWhen(
-                        //     data: (stats) => (stats.closed + stats.cancelled).toInt(),
-                        //     orElse: () => 0,
-                        //   ),
-                        //   const Color(0xFF6B7280),
-                        // ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              isDark: isDark,
-            ),
-          ),
+          // SliverPersistentHeader(
+          //   pinned: true,
+          //   delegate: _TabBarDelegate(
+          //     tabBar: TabBar(
+          //       controller: _tabController,
+          //       // indicatorColor: const Color(0xFF10B981),
+          //       indicatorColor: AppColors.primaryColor,
+          //       indicatorWeight: 3,
+          //       labelColor: AppColors.primaryColor,
+          //       unselectedLabelColor: isDark
+          //           ? Colors.grey[400]
+          //           : const Color(0xFF6B7280),
+          //       labelStyle: TextStyle(
+          //         fontWeight: FontWeight.bold,
+          //         fontSize: isSmallScreen ? 14 : 15,
+          //       ),
+          //       tabs: [
+          //         Tab(
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               const Icon(Icons.pending_actions_rounded, size: 18),
+          //               const SizedBox(width: 8),
+          //               const Text('Active'),
+          //               const SizedBox(width: 6),
+          //               _buildCountBadge(
+          //                 statsAsync.maybeWhen(
+          //                   data: (stats) => stats.open + stats.inProgress,
+          //                   orElse: () => 0,
+          //                 ),
+          //                 const Color(0xFFEF4444),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         Tab(
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               const Icon(Icons.pending_actions_rounded, size: 18),
+          //               const SizedBox(width: 8),
+          //               const Text('Active'),
+          //               const SizedBox(width: 6),
+          //               _buildCountBadge(
+          //                 statsAsync.maybeWhen(
+          //                   data: (stats) => stats.open + stats.inProgress,
+          //                   orElse: () => 0,
+          //                 ),
+          //                 const Color(0xFFEF4444),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         Tab(
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.center,
+          //             children: [
+          //               const Icon(Icons.archive_rounded, size: 18),
+          //               const SizedBox(width: 8),
+          //               const Text('Archived'),
+          //               const SizedBox(width: 6),
+          //               // _buildCountBadge(
+          //               //   statsAsync.maybeWhen(
+          //               //     data: (stats) => (stats.closed + stats.cancelled).toInt(),
+          //               //     orElse: () => 0,
+          //               //   ),
+          //               //   const Color(0xFF6B7280),
+          //               // ),
+          //             ],
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     isDark: isDark,
+          //   ),
+          // ),
 
           // Tab Content
           SliverFillRemaining(
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildActiveReportsTab(allReportsAsync, isDark, isSmallScreen, isAdmin),
-                _buildArchivedReportsTab(
+                _buildAllReportsTab(allReportsAsync, isDark, isSmallScreen, isAdmin),
+                _buildOpenReportsTab(allReportsAsync, isDark, isSmallScreen, isAdmin),
+                _buildProgressReportsTab(
                   allReportsAsync,
                   isDark,
                   isSmallScreen,
+                    isAdmin
+                ),
+                _buildClosedReportsTab(
+                    allReportsAsync,
+                    isDark,
+                    isSmallScreen,
                     isAdmin
                 ),
               ],
@@ -244,6 +269,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.cases_rounded,
               Colors.white,
               isSmallScreen,
+              onPressed:  (){
+                _tabController.animateTo(0);
+            },
             ),
           ),
           const SizedBox(width: 8),
@@ -254,6 +282,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.warning_rounded,
               const Color(0xFFEF4444),
               isSmallScreen,
+              onPressed:  (){
+                _tabController.animateTo(1);
+            },
             ),
           ),
           const SizedBox(width: 8),
@@ -264,6 +295,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.pending_rounded,
               const Color(0xFFFBBF24),
               isSmallScreen,
+              onPressed:  (){
+                _tabController.animateTo(2);
+            },
             ),
           ),
           const SizedBox(width: 8),
@@ -274,6 +308,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.check_circle_rounded,
               AppColors.primaryColor,
               isSmallScreen,
+              onPressed:  (){
+                _tabController.animateTo(3);
+            },
             ),
           ),
         ],
@@ -286,38 +323,41 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     String value,
     IconData icon,
     Color color,
-    bool isSmallScreen,
+    bool isSmallScreen, {required void Function() onPressed}
   ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: isSmallScreen ? 8 : 10,
-        horizontal: isSmallScreen ? 6 : 8,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: isSmallScreen ? 18 : 20),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: isSmallScreen ? 16 : 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: isSmallScreen ? 8 : 10,
+          horizontal: isSmallScreen ? 6 : 8,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withOpacity(0.3)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: isSmallScreen ? 18 : 20),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: isSmallScreen ? 16 : 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: isSmallScreen ? 9 : 10,
-              color: Colors.white.withOpacity(0.9),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: isSmallScreen ? 9 : 10,
+                color: Colors.white.withOpacity(0.9),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -478,7 +518,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     );
   }
 
-  Widget _buildActiveReportsTab(
+  Widget _buildOpenReportsTab(
     AsyncValue<List<Report>> reportsAsync,
     bool isDark,
     bool isSmallScreen,
@@ -493,8 +533,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
         final activeReports = reports
             .where(
               (r) =>
-                  r.status == ReportStatus.open ||
-                  r.status == ReportStatus.inProgress,
+                  r.status == ReportStatus.open,
             )
             .toList();
 
@@ -534,7 +573,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     );
   }
 
-  Widget _buildArchivedReportsTab(
+  Widget _buildProgressReportsTab(
     AsyncValue<List<Report>> reportsAsync,
     bool isDark,
     bool isSmallScreen,
@@ -549,8 +588,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
         final archivedReports = reports
             .where(
               (r) =>
-                  r.status == ReportStatus.closed ||
-                  r.status == ReportStatus.cancelled,
+                  r.status == ReportStatus.inProgress,
             )
             .toList();
 
@@ -581,6 +619,111 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 filteredReports[index],
                 isDark,
                 isSmallScreen,
+                  isAdmin
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildClosedReportsTab(
+      AsyncValue<List<Report>> reportsAsync,
+      bool isDark,
+      bool isSmallScreen,
+      bool isAdmin,
+      ) {
+    return reportsAsync.when(
+      loading: () => Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
+      ),
+      error: (error, stack) => _buildErrorState(error, isDark),
+      data: (reports) {
+        final archivedReports = reports
+            .where(
+              (r) =>
+          r.status == ReportStatus.closed,
+        )
+            .toList();
+
+        final filteredReports = _filterAndSortReports(archivedReports);
+
+        if (filteredReports.isEmpty) {
+          return _buildEmptyState(
+            'No Archived Reports',
+            _searchQuery.isNotEmpty
+                ? 'No reports match your search'
+                : 'No archived reports yet',
+            Icons.archive_rounded,
+            isDark,
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(allReportsProvider);
+            await ref.read(allReportsProvider.future);
+          },
+          color: AppColors.primaryColor,
+          child: ListView.builder(
+            padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+            itemCount: filteredReports.length,
+            itemBuilder: (context, index) {
+              return _buildStaffReportCard(
+                  filteredReports[index],
+                  isDark,
+                  isSmallScreen,
+                  isAdmin
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildAllReportsTab(
+      AsyncValue<List<Report>> reportsAsync,
+      bool isDark,
+      bool isSmallScreen,
+      bool isAdmin,
+      ) {
+    return reportsAsync.when(
+      loading: () => Center(
+        child: CircularProgressIndicator(color: AppColors.primaryColor),
+      ),
+      error: (error, stack) => _buildErrorState(error, isDark),
+      data: (reports) {
+        final archivedReports = reports.toList();
+
+        final filteredReports = _filterAndSortReports(archivedReports);
+
+        if (filteredReports.isEmpty) {
+          return _buildEmptyState(
+            'No Archived Reports',
+            _searchQuery.isNotEmpty
+                ? 'No reports match your search'
+                : 'No archived reports yet',
+            Icons.archive_rounded,
+            isDark,
+          );
+        }
+
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(allReportsProvider);
+            await ref.read(allReportsProvider.future);
+          },
+          color: AppColors.primaryColor,
+          child: ListView.builder(
+            padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
+            itemCount: filteredReports.length,
+            itemBuilder: (context, index) {
+              return _buildStaffReportCard(
+                  filteredReports[index],
+                  isDark,
+                  isSmallScreen,
                   isAdmin
               );
             },

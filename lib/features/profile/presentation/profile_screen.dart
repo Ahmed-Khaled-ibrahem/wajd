@@ -139,28 +139,28 @@ class ProfileScreen extends ConsumerWidget {
               },
             ),
 
-            // Builder(
-            //   builder: (context) {
-            //     if (role == UserRole.admin) {
-            //       return _buildProfileOption(
-            //         context,
-            //         icon: Icons.feedback_outlined,
-            //         title: 'Users Feedbacks',
-            //         onTap: () {
-            //           context.push('/all-feedbacks');
-            //         },
-            //       );
-            //     }
-            //     return _buildProfileOption(
-            //       context,
-            //       icon: Iconsax.message_question,
-            //       title: 'Help & Support',
-            //       onTap: () {
-            //         context.push('/help-support');
-            //       },
-            //     );
-            //   },
-            // ),
+            Builder(
+              builder: (context) {
+                if (role == UserRole.admin) {
+                  return _buildProfileOption(
+                    context,
+                    icon: Icons.feedback_outlined,
+                    title: 'Users Feedbacks',
+                    onTap: () {
+                      context.push('/all-feedbacks');
+                    },
+                  );
+                }
+                return _buildProfileOption(
+                  context,
+                  icon: Iconsax.message_question,
+                  title: 'Help & Support',
+                  onTap: () {
+                    context.push('/help-support');
+                  },
+                );
+              },
+            ),
 
             // _buildProfileOption(
             //   context,

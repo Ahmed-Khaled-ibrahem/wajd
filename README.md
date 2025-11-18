@@ -20,4 +20,10 @@ fixes :
 - Recommend system is working now
 
 
-
+new edits : 
+- age and gender not optional anymore
+- cards is clickable now
+- backup phone added to parent
+- feedback system working
+- diffrent apps (mobile or kiosik) done
+- you can now make report without sign in on kiosk only

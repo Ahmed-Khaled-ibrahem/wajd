@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +9,8 @@ import '../../models/auth_state.dart';
 import 'controller/auth_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final isLinux = !Platform.isLinux;
   @override
   ConsumerState createState() => _LoginScreenState();
 }
@@ -17,6 +20,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
+
 
   @override
   void dispose() {
@@ -66,6 +70,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     const SizedBox(height: 12),
                     _buildSignUpSection(isDark),
                     const SizedBox(height: 20),
+                    widget.isLinux ? _buildKiosikSection(isDark) : const SizedBox(),
+                    SizedBox(height: 20,)
                   ],
                 ),
               ),
@@ -94,7 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   Widget _buildWelcomeText(bool isDark) {
     return Text(
-      "Welcome Back!".tr(),
+       "Welcome Back!".tr(),
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 32,
@@ -404,29 +410,132 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  void _showErrorSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_outline, color: Colors.white),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(fontSize: 15),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.redAccent,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 4),
-      ),
+  Widget _buildKiosikSection(bool isDark) {
+    return AnimatedBuilder(
+      animation: AlwaysStoppedAnimation(0),
+      builder: (context, child) {
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0.0, end: 1.0),
+          duration: const Duration(seconds: 6),
+          curve: Curves.easeInOut,
+          onEnd: () {
+            // Force rebuild to repeat animation
+          },
+          builder: (context, value, child) {
+            final glowValue = sin(value * 2 * pi);
+            final glowOpacity = 0.4 + (glowValue * 0.4);
+
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                // Outer glow ring
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.cyan.withOpacity(glowOpacity * 0.6),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                ),
+                // Main button
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(glowOpacity),
+                        blurRadius: 15,
+                        offset: const Offset(0, 4),
+                      ),
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () => context.push('/report_other_child'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 14,
+                      ),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        side: BorderSide(
+                          color: Colors.green.shade300.withOpacity(0.5),
+                          width: 2,
+                        ),
+                      ),
+                    ).copyWith(
+                      backgroundColor: WidgetStateProperty.all(Colors.transparent),
+                    ),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.green.shade300,
+                            Colors.green.shade500,
+                            Colors.green.shade700,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Container(
+                        constraints: const BoxConstraints(minHeight: 44),
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ShaderMask(
+                              shaderCallback: (bounds) => LinearGradient(
+                                colors: [
+                                  Colors.white.withOpacity(0.7 + glowValue * 0.3),
+                                  Colors.white,
+                                ],
+                              ).createShader(bounds),
+                              child: const Icon(
+                                Icons.report_problem_rounded,
+                                color: Colors.white,
+                                size: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Quick Report".tr(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                                color: Colors.white,
+                                letterSpacing: 0.8,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black26,
+                                    offset: Offset(0, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

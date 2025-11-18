@@ -556,7 +556,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Gender',
+                'Gender *',
                 style: TextStyle(
                   fontSize: isSmallScreen ? 14 : 15,
                   fontWeight: FontWeight.w600,
@@ -652,7 +652,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
               readOnly: true,
               onTap: () => _selectDate(context),
               decoration: InputDecoration(
-                labelText: 'Birth Date',
+                labelText: 'Birth Date *',
                 hintText: 'Select date',
                 prefixIcon: Container(
                   margin: const EdgeInsets.all(10),

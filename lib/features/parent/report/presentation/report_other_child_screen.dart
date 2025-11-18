@@ -841,7 +841,7 @@ class _ReportOtherChildScreenState
         controller: _ageController,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          labelText: 'Age ',
+          labelText: 'Age *',
           hintText: 'Est. age',
           prefixIcon: Container(
             margin: const EdgeInsets.all(10),
@@ -864,16 +864,16 @@ class _ReportOtherChildScreenState
             vertical: 16,
           ),
         ),
-        // validator: (value) {
-        //   if (value == null || value.trim().isEmpty) {
-        //     return 'Required';
-        //   }
-        //   final age = int.tryParse(value);
-        //   if (age == null || age < 0 || age > 18) {
-        //     return 'Invalid age';
-        //   }
-        //   return null;
-        // },
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Required';
+          }
+          final age = int.tryParse(value);
+          if (age == null || age < 0 || age > 18) {
+            return 'Invalid age';
+          }
+          return null;
+        },
       ),
     );
   }

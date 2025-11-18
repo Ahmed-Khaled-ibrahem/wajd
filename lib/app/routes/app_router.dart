@@ -43,7 +43,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/login',
-            builder: (context, state) => const LoginScreen(),
+            builder: (context, state) => LoginScreen(),
           ),
           GoRoute(
             path: '/loading',
@@ -74,7 +74,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
-            path: 'all-feedbacks',
+            path: '/all-feedbacks',
             builder: (context, state) => const FeedbacksScreen(),
           ),
           GoRoute(

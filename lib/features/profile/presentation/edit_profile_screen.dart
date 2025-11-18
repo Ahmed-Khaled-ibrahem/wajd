@@ -21,6 +21,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _backupPhoneController = TextEditingController();
   File? _pickedImage;
   bool _isLoading = false;
 
@@ -31,12 +32,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   void _loadUserData() {
-    final authState = ref.read(authControllerProvider);
-    if (authState is AuthAuthenticated) {
-      _nameController.text = authState.profile.name;
-      _emailController.text = authState.profile.email ?? '';
-      _phoneController.text = authState.profile.phoneNumber ?? '';
-    }
+    final profile = ref.read(currentUserProfileProvider);
+      _nameController.text = profile?.name ?? '';
+      _emailController.text = profile?.email ?? '';
+      _phoneController.text = profile?.phoneNumber ?? '';
+      _backupPhoneController.text = profile?.metadata?['backupPhone'] ?? '';
   }
 
   Future<void> _pickImage() async {
@@ -88,6 +88,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               profileImageUrl: _pickedImage != null
                   ? imagePublicLink
                   : user.profileImageUrl,
+              metadata: {
+                ...?user.metadata,
+                'backupPhone': _backupPhoneController.text.trim(),
+              },
             ),
           );
 
@@ -95,6 +99,10 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         name: _nameController.text.trim(),
         phoneNumber: _phoneController.text.trim(),
         profileImageUrl: imagePublicLink,
+        metadata: {
+          ...?user.metadata,
+          'backupPhone': _backupPhoneController.text.trim(),
+        },
       );
 
       if (mounted) {
@@ -121,6 +129,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _backupPhoneController.dispose();
     super.dispose();
   }
 
@@ -272,6 +281,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         controller: _phoneController,
                         decoration: const InputDecoration(
                           labelText: 'Phone Number',
+                          prefixIcon: Icon(Icons.phone_outlined),
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 24),
+                      TextFormField(
+                        controller: _backupPhoneController,
+                        decoration: const InputDecoration(
+                          labelText: 'Backup Number',
                           prefixIcon: Icon(Icons.phone_outlined),
                           border: OutlineInputBorder(),
                         ),

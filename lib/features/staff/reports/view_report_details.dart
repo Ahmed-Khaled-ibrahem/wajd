@@ -748,7 +748,7 @@ class _ViewReportDetailsScreenState
     ReportStatus status,
     String label,
     IconData icon,
-    Color color,
+    Color color
   ) {
     final isCurrentStatus = report.status == status;
     return ListTile(
