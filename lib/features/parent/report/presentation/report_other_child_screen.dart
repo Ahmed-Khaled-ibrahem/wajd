@@ -220,9 +220,9 @@ class _ReportOtherChildScreenState
       // Run the command
       ProcessResult result = await Process.run(
         'rpicam-jpeg',
-        ['--output', '/home/pi/Desktop/flutter_photo.jpg'],
+        ['--output', '/home/pi/Desktop/photo.jpg'],
       );
-      return '/home/pi/Desktop/flutter_photo.jpg';
+      return '/home/pi/Desktop/photo.jpg';
 
     } catch (e) {
       print("Error taking photo: $e");
@@ -247,9 +247,11 @@ class _ReportOtherChildScreenState
           _childPhoto = pickedFile;
         });
       }
-    } else if (Platform.isLinux) {
-      final picture = await takePiCameraPhoto();
-      setState(() => _childPhoto = XFile(picture));
+
+      if ( source == ImageSource.camera &&  Platform.isLinux) {
+        final picture = await takePiCameraPhoto();
+        setState(() => _childPhoto = XFile(picture));
+      }
     }
   }
 
