@@ -215,13 +215,19 @@ class _ReportOtherChildScreenState
     );
   }
 
-  Future<String?> takePiPhoto() async {
-    final result = await Process.run('libcamera-jpeg', ['-o', 'photo.jpg']);
+  Future<String> takePiCameraPhoto() async {
+    try {
+      // Run the command
+      ProcessResult result = await Process.run(
+        'rpicam-jpeg',
+        ['--output', '/home/pi/Desktop/flutter_photo.jpg'],
+      );
+      return '/home/pi/Desktop/flutter_photo.jpg';
 
-    if (result.exitCode == 0) {
-      return 'photo.jpg';
+    } catch (e) {
+      print("Error taking photo: $e");
+      return '';
     }
-    return null;
   }
 
 
@@ -242,8 +248,8 @@ class _ReportOtherChildScreenState
         });
       }
     } else if (Platform.isLinux) {
-      final picture = await takePiPhoto();
-      setState(() => _childPhoto = XFile(picture ?? ''));
+      final picture = await takePiCameraPhoto();
+      setState(() => _childPhoto = XFile(picture));
     }
   }
 
