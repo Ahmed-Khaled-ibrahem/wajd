@@ -10,7 +10,7 @@ import 'controller/auth_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   LoginScreen({super.key});
-  final isLinux = !Platform.isLinux;
+  final isLinux = Platform.isLinux;
   @override
   ConsumerState createState() => _LoginScreenState();
 }
