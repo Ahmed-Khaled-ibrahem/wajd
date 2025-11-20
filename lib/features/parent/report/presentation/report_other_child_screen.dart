@@ -119,9 +119,9 @@ class _ReportOtherChildScreenState
         });
       }
     } catch (e) {
-      if (mounted) {
-        _showSnackBar('Error getting location: ${e.toString()}', isError: true);
-      }
+      // if (mounted) {
+      //   _showSnackBar('Error getting location: ${e.toString()}', isError: true);
+      // }
     } finally {
       if (mounted) {
         setState(() => _isLoadingLocation = false);
