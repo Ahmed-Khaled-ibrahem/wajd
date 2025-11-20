@@ -215,28 +215,21 @@ class _ReportOtherChildScreenState
     );
   }
 
-  Future<File> openCameraRaspberryPi(BuildContext context) async {
-    final cameras = await availableCameras();
-    final camera = cameras.first;
+  Future<String?> takePiPhoto() async {
+    final result = await Process.run('libcamera-jpeg', ['-o', 'photo.jpg']);
 
-    final controller = CameraController(
-      camera,
-      ResolutionPreset.medium,
-      enableAudio: false,
-    );
-
-    await controller.initialize();
-
-    final picture = await controller.takePicture();
-
-    return File(picture.path);
+    if (result.exitCode == 0) {
+      return 'photo.jpg';
+    }
+    return null;
   }
 
-  Future<void> _pickImage() async {
-    if (Platform.isAndroid) {
-      final source = await _showImageSourceDialog();
-      if (source == null) return;
 
+  Future<void> _pickImage() async {
+    final source = await _showImageSourceDialog();
+    if (source == null) return;
+
+    if (Platform.isAndroid) {
       final pickedFile = await _picker.pickImage(
         source: source,
         imageQuality: 80,
@@ -249,11 +242,8 @@ class _ReportOtherChildScreenState
         });
       }
     } else if (Platform.isLinux) {
-      // Raspberry Pi camera
-      final file = await openCameraRaspberryPi(context);
-      if (file != null) {
-        setState(() => _childPhoto = XFile(file.path));
-      }
+      final picture = await takePiPhoto();
+      setState(() => _childPhoto = XFile(picture ?? ''));
     }
   }
 
