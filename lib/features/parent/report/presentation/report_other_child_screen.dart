@@ -217,12 +217,11 @@ class _ReportOtherChildScreenState
 
   Future<String> takePiCameraPhoto() async {
     try {
-      ProcessResult result = await Process.run(
-        'rpicam-jpeg',
-        ['--output', '/home/pi/Desktop/photo.jpg'],
-      );
+      ProcessResult result = await Process.run('rpicam-jpeg', [
+        '--output',
+        '/home/pi/Desktop/photo.jpg',
+      ]);
       return '/home/pi/Desktop/photo.jpg';
-
     } catch (e) {
       print("Error taking photo: $e");
       return '';
@@ -233,23 +232,23 @@ class _ReportOtherChildScreenState
     final source = await _showImageSourceDialog();
     if (source == null) return;
 
-      final pickedFile = await _picker.pickImage(
-        source: source,
-        imageQuality: 80,
-        maxWidth: 1200,
-      );
+    if (source == ImageSource.camera && Platform.isLinux) {
+      final picture = await takePiCameraPhoto();
+      setState(() => _childPhoto = XFile(picture));
+      return;
+    }
 
-      if (pickedFile != null) {
-        setState(() {
-          _childPhoto = pickedFile;
-        });
-      }
+    final pickedFile = await _picker.pickImage(
+      source: source,
+      imageQuality: 80,
+      maxWidth: 1200,
+    );
 
-      if ( source == ImageSource.camera &&  Platform.isLinux) {
-        final picture = await takePiCameraPhoto();
-        setState(() => _childPhoto = XFile(picture));
-      }
-
+    if (pickedFile != null) {
+      setState(() {
+        _childPhoto = pickedFile;
+      });
+    }
   }
 
   Future<ImageSource?> _showImageSourceDialog() {
