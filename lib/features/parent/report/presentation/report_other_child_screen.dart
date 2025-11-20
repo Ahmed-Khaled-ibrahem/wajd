@@ -217,7 +217,6 @@ class _ReportOtherChildScreenState
 
   Future<String> takePiCameraPhoto() async {
     try {
-      // Run the command
       ProcessResult result = await Process.run(
         'rpicam-jpeg',
         ['--output', '/home/pi/Desktop/photo.jpg'],
@@ -230,12 +229,10 @@ class _ReportOtherChildScreenState
     }
   }
 
-
   Future<void> _pickImage() async {
     final source = await _showImageSourceDialog();
     if (source == null) return;
 
-    if (Platform.isAndroid) {
       final pickedFile = await _picker.pickImage(
         source: source,
         imageQuality: 80,
@@ -252,7 +249,7 @@ class _ReportOtherChildScreenState
         final picture = await takePiCameraPhoto();
         setState(() => _childPhoto = XFile(picture));
       }
-    }
+
   }
 
   Future<ImageSource?> _showImageSourceDialog() {
