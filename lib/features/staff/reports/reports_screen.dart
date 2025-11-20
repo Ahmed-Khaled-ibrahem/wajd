@@ -143,19 +143,29 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildAllReportsTab(allReportsAsync, isDark, isSmallScreen, isAdmin),
-                _buildOpenReportsTab(allReportsAsync, isDark, isSmallScreen, isAdmin),
+                _buildAllReportsTab(
+                  allReportsAsync,
+                  isDark,
+                  isSmallScreen,
+                  isAdmin,
+                ),
+                _buildOpenReportsTab(
+                  allReportsAsync,
+                  isDark,
+                  isSmallScreen,
+                  isAdmin,
+                ),
                 _buildProgressReportsTab(
                   allReportsAsync,
                   isDark,
                   isSmallScreen,
-                    isAdmin
+                  isAdmin,
                 ),
                 _buildClosedReportsTab(
-                    allReportsAsync,
-                    isDark,
-                    isSmallScreen,
-                    isAdmin
+                  allReportsAsync,
+                  isDark,
+                  isSmallScreen,
+                  isAdmin,
                 ),
               ],
             ),
@@ -215,7 +225,10 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Staff Dashboard',
+                              ref.read(currentUserProfileProvider)?.role.name ==
+                                      'staff'
+                                  ? 'Staff Dashboard'
+                                  : 'Admin Dashboard',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: isSmallScreen ? 20 : 24,
@@ -269,9 +282,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.cases_rounded,
               Colors.white,
               isSmallScreen,
-              onPressed:  (){
+              onPressed: () {
                 _tabController.animateTo(0);
-            },
+              },
             ),
           ),
           const SizedBox(width: 8),
@@ -282,9 +295,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.warning_rounded,
               const Color(0xFFEF4444),
               isSmallScreen,
-              onPressed:  (){
+              onPressed: () {
                 _tabController.animateTo(1);
-            },
+              },
             ),
           ),
           const SizedBox(width: 8),
@@ -295,9 +308,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.pending_rounded,
               const Color(0xFFFBBF24),
               isSmallScreen,
-              onPressed:  (){
+              onPressed: () {
                 _tabController.animateTo(2);
-            },
+              },
             ),
           ),
           const SizedBox(width: 8),
@@ -308,9 +321,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               Icons.check_circle_rounded,
               AppColors.primaryColor,
               isSmallScreen,
-              onPressed:  (){
+              onPressed: () {
                 _tabController.animateTo(3);
-            },
+              },
             ),
           ),
         ],
@@ -323,8 +336,9 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     String value,
     IconData icon,
     Color color,
-    bool isSmallScreen, {required void Function() onPressed}
-  ) {
+    bool isSmallScreen, {
+    required void Function() onPressed,
+  }) {
     return InkWell(
       onTap: onPressed,
       child: Container(
@@ -408,10 +422,18 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
               children: [
                 _buildFilterChip('All', 'all', Icons.all_inclusive),
                 const SizedBox(width: 8),
-                _buildFilterChip(
-                  'Assigned to Me',
-                  'assigned',
-                  Icons.person_rounded,
+                Builder(
+                  builder: (context) {
+                    if (ref.read(currentUserProfileProvider)?.role.name ==
+                        'staff') {
+                      return _buildFilterChip(
+                        'Assigned to Me',
+                        'assigned',
+                        Icons.person_rounded,
+                      );
+                    }
+                    return Container();
+                  },
                 ),
                 const SizedBox(width: 8),
                 _buildFilterChip(
@@ -522,7 +544,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     AsyncValue<List<Report>> reportsAsync,
     bool isDark,
     bool isSmallScreen,
-      bool isAdmin
+    bool isAdmin,
   ) {
     return reportsAsync.when(
       loading: () => Center(
@@ -531,10 +553,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       error: (error, stack) => _buildErrorState(error, isDark),
       data: (reports) {
         final activeReports = reports
-            .where(
-              (r) =>
-                  r.status == ReportStatus.open,
-            )
+            .where((r) => r.status == ReportStatus.open)
             .toList();
 
         final filteredReports = _filterAndSortReports(activeReports);
@@ -564,7 +583,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 filteredReports[index],
                 isDark,
                 isSmallScreen,
-                  isAdmin
+                isAdmin,
               );
             },
           ),
@@ -577,7 +596,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     AsyncValue<List<Report>> reportsAsync,
     bool isDark,
     bool isSmallScreen,
-      bool isAdmin,
+    bool isAdmin,
   ) {
     return reportsAsync.when(
       loading: () => Center(
@@ -586,10 +605,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       error: (error, stack) => _buildErrorState(error, isDark),
       data: (reports) {
         final archivedReports = reports
-            .where(
-              (r) =>
-                  r.status == ReportStatus.inProgress,
-            )
+            .where((r) => r.status == ReportStatus.inProgress)
             .toList();
 
         final filteredReports = _filterAndSortReports(archivedReports);
@@ -619,7 +635,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                 filteredReports[index],
                 isDark,
                 isSmallScreen,
-                  isAdmin
+                isAdmin,
               );
             },
           ),
@@ -629,11 +645,11 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
   }
 
   Widget _buildClosedReportsTab(
-      AsyncValue<List<Report>> reportsAsync,
-      bool isDark,
-      bool isSmallScreen,
-      bool isAdmin,
-      ) {
+    AsyncValue<List<Report>> reportsAsync,
+    bool isDark,
+    bool isSmallScreen,
+    bool isAdmin,
+  ) {
     return reportsAsync.when(
       loading: () => Center(
         child: CircularProgressIndicator(color: AppColors.primaryColor),
@@ -641,10 +657,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
       error: (error, stack) => _buildErrorState(error, isDark),
       data: (reports) {
         final archivedReports = reports
-            .where(
-              (r) =>
-          r.status == ReportStatus.closed,
-        )
+            .where((r) => r.status == ReportStatus.closed)
             .toList();
 
         final filteredReports = _filterAndSortReports(archivedReports);
@@ -671,10 +684,10 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             itemCount: filteredReports.length,
             itemBuilder: (context, index) {
               return _buildStaffReportCard(
-                  filteredReports[index],
-                  isDark,
-                  isSmallScreen,
-                  isAdmin
+                filteredReports[index],
+                isDark,
+                isSmallScreen,
+                isAdmin,
               );
             },
           ),
@@ -684,11 +697,11 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
   }
 
   Widget _buildAllReportsTab(
-      AsyncValue<List<Report>> reportsAsync,
-      bool isDark,
-      bool isSmallScreen,
-      bool isAdmin,
-      ) {
+    AsyncValue<List<Report>> reportsAsync,
+    bool isDark,
+    bool isSmallScreen,
+    bool isAdmin,
+  ) {
     return reportsAsync.when(
       loading: () => Center(
         child: CircularProgressIndicator(color: AppColors.primaryColor),
@@ -721,10 +734,10 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
             itemCount: filteredReports.length,
             itemBuilder: (context, index) {
               return _buildStaffReportCard(
-                  filteredReports[index],
-                  isDark,
-                  isSmallScreen,
-                  isAdmin
+                filteredReports[index],
+                isDark,
+                isSmallScreen,
+                isAdmin,
               );
             },
           ),
@@ -778,7 +791,12 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
     return filtered;
   }
 
-  Widget _buildStaffReportCard(Report report, bool isDark, bool isSmallScreen, bool isAdmin) {
+  Widget _buildStaffReportCard(
+    Report report,
+    bool isDark,
+    bool isSmallScreen,
+    bool isAdmin,
+  ) {
     final statusColor = _getStatusColor(report.status);
     final isAssignedToMe =
         report.assignedStaffId == ref.read(currentUserProvider)?.id;
@@ -933,17 +951,17 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
                       ),
                       onSelected: (value) => _handleStaffAction(value, report),
                       itemBuilder: (context) => [
-                        if(!isAdmin)
-                         PopupMenuItem(
-                          value: 'assign',
-                          child: Row(
-                            children: [
-                              Icon(Icons.person_add_rounded, size: 18),
-                              SizedBox(width: 12),
-                              Text('Assign to Me'),
-                            ],
+                        if (!isAdmin)
+                          PopupMenuItem(
+                            value: 'assign',
+                            child: Row(
+                              children: [
+                                Icon(Icons.person_add_rounded, size: 18),
+                                SizedBox(width: 12),
+                                Text('Assign to Me'),
+                              ],
+                            ),
                           ),
-                        ),
                         // const PopupMenuItem(
                         //   value: 'status',
                         //   child: Row(
@@ -1365,7 +1383,6 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
   }
 
   Widget _buildErrorState(Object error, bool isDark) {
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -1631,7 +1648,7 @@ class _StaffReportsScreenState extends ConsumerState<StaffReportsScreen>
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
+          SnackBar(
             content: Text('Report closed successfully'),
             backgroundColor: AppColors.primaryColor,
           ),

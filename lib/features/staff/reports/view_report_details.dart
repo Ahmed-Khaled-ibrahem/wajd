@@ -139,6 +139,12 @@ class _ViewReportDetailsScreenState
                         Icons.phone_rounded,
                         isDark,
                       ),
+                      _buildInfoRow(
+                        'Backup Phone',
+                        report.metadata?['backup_phone'] ?? '....',
+                        Icons.phone_rounded,
+                        isDark,
+                      ),
                       if (report.reporterEmail != null)
                         _buildInfoRow(
                           'Email',
@@ -195,9 +201,7 @@ class _ViewReportDetailsScreenState
                   ],
                   _buildActionButtons(report, isDark, isSmallScreen),
                   const SizedBox(height: 5),
-                  SimilarReportsCard(
-                    currentReport: report,
-                  ),
+                  SimilarReportsCard(currentReport: report),
                 ]),
           ),
         ),
@@ -748,7 +752,7 @@ class _ViewReportDetailsScreenState
     ReportStatus status,
     String label,
     IconData icon,
-    Color color
+    Color color,
   ) {
     final isCurrentStatus = report.status == status;
     return ListTile(

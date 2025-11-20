@@ -326,7 +326,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
               // Medical Information Section
               _buildSectionHeader('Medical Information', isSmallScreen),
               const SizedBox(height: 16),
-              _buildBloodTypeDropdown(isDark, isSmallScreen),
+              // _buildBloodTypeDropdown(isDark, isSmallScreen),
               const SizedBox(height: 16),
               _buildMedicalConditionsField(isDark, isSmallScreen),
 
@@ -727,48 +727,48 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
     );
   }
 
-  Widget _buildBloodTypeDropdown(bool isDark, bool isSmallScreen) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColors.primaryColor.withOpacity(0.3),
-          width: 1.5,
-        ),
-      ),
-      child: DropdownButtonFormField<String>(
-        value: _selectedBloodType,
-        decoration: InputDecoration(
-          labelText: 'Blood Type (Optional)',
-          hintText: 'Select blood type',
-          prefixIcon: Container(
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(
-              Icons.bloodtype_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-          border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-        ),
-        items: _bloodTypes.map((type) {
-          return DropdownMenuItem(value: type, child: Text(type));
-        }).toList(),
-        onChanged: (value) => setState(() => _selectedBloodType = value),
-      ),
-    );
-  }
+  // Widget _buildBloodTypeDropdown(bool isDark, bool isSmallScreen) {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(14),
+  //       border: Border.all(
+  //         color: AppColors.primaryColor.withOpacity(0.3),
+  //         width: 1.5,
+  //       ),
+  //     ),
+  //     child: DropdownButtonFormField<String>(
+  //       value: _selectedBloodType,
+  //       decoration: InputDecoration(
+  //         labelText: 'Blood Type (Optional)',
+  //         hintText: 'Select blood type',
+  //         prefixIcon: Container(
+  //           margin: const EdgeInsets.all(10),
+  //           padding: const EdgeInsets.all(8),
+  //           decoration: BoxDecoration(
+  //             gradient: const LinearGradient(
+  //               colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+  //             ),
+  //             borderRadius: BorderRadius.circular(10),
+  //           ),
+  //           child: const Icon(
+  //             Icons.bloodtype_rounded,
+  //             color: Colors.white,
+  //             size: 20,
+  //           ),
+  //         ),
+  //         border: InputBorder.none,
+  //         contentPadding: const EdgeInsets.symmetric(
+  //           horizontal: 16,
+  //           vertical: 16,
+  //         ),
+  //       ),
+  //       items: _bloodTypes.map((type) {
+  //         return DropdownMenuItem(value: type, child: Text(type));
+  //       }).toList(),
+  //       onChanged: (value) => setState(() => _selectedBloodType = value),
+  //     ),
+  //   );
+  // }
 
   Widget _buildMedicalConditionsField(bool isDark, bool isSmallScreen) {
     return Container(

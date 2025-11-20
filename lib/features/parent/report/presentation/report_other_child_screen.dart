@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +11,8 @@ import 'package:wajd/models/report_model.dart';
 import 'package:wajd/services/supabase_cleint.dart';
 import '../../../../app/const/colors.dart';
 import '../../../../providers/report_provider.dart';
+import '../../../../providers/user_provider.dart';
+import '../../../login/controller/current_profile_provider.dart';
 
 class ReportOtherChildScreen extends ConsumerStatefulWidget {
   const ReportOtherChildScreen({Key? key}) : super(key: key);
@@ -212,20 +215,45 @@ class _ReportOtherChildScreenState
     );
   }
 
-  Future<void> _pickImage() async {
-    final source = await _showImageSourceDialog();
-    if (source == null) return;
+  Future<File> openCameraRaspberryPi(BuildContext context) async {
+    final cameras = await availableCameras();
+    final camera = cameras.first;
 
-    final pickedFile = await _picker.pickImage(
-      source: source,
-      imageQuality: 80,
-      maxWidth: 1200,
+    final controller = CameraController(
+      camera,
+      ResolutionPreset.medium,
+      enableAudio: false,
     );
 
-    if (pickedFile != null) {
-      setState(() {
-        _childPhoto = pickedFile;
-      });
+    await controller.initialize();
+
+    final picture = await controller.takePicture();
+
+    return File(picture.path);
+  }
+
+  Future<void> _pickImage() async {
+    if (Platform.isAndroid) {
+      final source = await _showImageSourceDialog();
+      if (source == null) return;
+
+      final pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 80,
+        maxWidth: 1200,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _childPhoto = pickedFile;
+        });
+      }
+    } else if (Platform.isLinux) {
+      // Raspberry Pi camera
+      final file = await openCameraRaspberryPi(context);
+      if (file != null) {
+        setState(() => _childPhoto = XFile(file.path));
+      }
     }
   }
 
@@ -280,9 +308,7 @@ class _ReportOtherChildScreenState
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                gradient:  LinearGradient(
-                  colors: AppColors.gradientColor,
-                ),
+                gradient: LinearGradient(colors: AppColors.gradientColor),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(icon, color: Colors.white, size: 24),
@@ -322,7 +348,7 @@ class _ReportOtherChildScreenState
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme:  ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: AppColors.primaryColor,
               onPrimary: Colors.white,
             ),
@@ -339,7 +365,7 @@ class _ReportOtherChildScreenState
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              colorScheme:  ColorScheme.light(
+              colorScheme: ColorScheme.light(
                 primary: AppColors.primaryColor,
                 onPrimary: Colors.white,
               ),
@@ -376,12 +402,14 @@ class _ReportOtherChildScreenState
       return;
     }
 
-    if (_currentPosition == null) {
-      _showSnackBar(
-        'Location is required. Please enable location services.',
-        isError: true,
-      );
-      return;
+    if (Platform.isAndroid) {
+      if (_currentPosition == null) {
+        _showSnackBar(
+          'Location is required. Please enable location services.',
+          isError: true,
+        );
+        return;
+      }
     }
 
     setState(() => _isSubmitting = true);
@@ -431,6 +459,9 @@ class _ReportOtherChildScreenState
           'longitude': _currentPosition!.longitude,
           'accuracy': _currentPosition!.accuracy,
           'reported_by_type': 'witness',
+          'backup_phone': ref
+              .read(currentUserProfileProvider)
+              ?.metadata?['backupPhone'],
         },
       );
 
@@ -470,9 +501,7 @@ class _ReportOtherChildScreenState
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient:  LinearGradient(
-                  colors: AppColors.gradientColor,
-                ),
+                gradient: LinearGradient(colors: AppColors.gradientColor),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -684,7 +713,7 @@ class _ReportOtherChildScreenState
           width: 4,
           height: 24,
           decoration: BoxDecoration(
-            gradient:  LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: AppColors.gradientColor,
@@ -755,9 +784,7 @@ class _ReportOtherChildScreenState
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      gradient:  LinearGradient(
-                        colors: AppColors.gradientColor,
-                      ),
+                      gradient: LinearGradient(colors: AppColors.gradientColor),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -794,7 +821,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color:AppColors.primaryColor.withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -807,9 +834,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -833,7 +858,7 @@ class _ReportOtherChildScreenState
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color:AppColors.primaryColor.withOpacity(0.3),
+          color: AppColors.primaryColor.withOpacity(0.3),
           width: 1.5,
         ),
       ),
@@ -847,9 +872,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -895,9 +918,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(Icons.wc_rounded, color: Colors.white, size: 20),
@@ -930,9 +951,7 @@ class _ReportOtherChildScreenState
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            gradient:  LinearGradient(
-              colors: AppColors.gradientColor,
-            ),
+            gradient: LinearGradient(colors: AppColors.gradientColor),
             borderRadius: BorderRadius.circular(10),
           ),
           child: const Icon(
@@ -953,7 +972,7 @@ class _ReportOtherChildScreenState
             color: AppColors.primaryColor,
           ),
         ),
-        trailing:  Icon(
+        trailing: Icon(
           Icons.edit_calendar_rounded,
           color: AppColors.primaryColor,
         ),
@@ -981,9 +1000,7 @@ class _ReportOtherChildScreenState
                 margin: const EdgeInsets.all(10),
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  gradient:  LinearGradient(
-                    colors: AppColors.gradientColor,
-                  ),
+                  gradient: LinearGradient(colors: AppColors.gradientColor),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Icon(
@@ -1006,7 +1023,7 @@ class _ReportOtherChildScreenState
             },
           ),
           if (_isLoadingLocation)
-             Padding(
+            Padding(
               padding: EdgeInsets.all(12),
               child: Row(
                 children: [
@@ -1030,7 +1047,7 @@ class _ReportOtherChildScreenState
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color:AppColors.primaryColor.withOpacity(0.05),
+                color: AppColors.primaryColor.withOpacity(0.05),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(14),
                   bottomRight: Radius.circular(14),
@@ -1038,13 +1055,13 @@ class _ReportOtherChildScreenState
               ),
               child: Row(
                 children: [
-                   Icon(
+                  Icon(
                     Icons.check_circle_rounded,
                     size: 16,
                     color: AppColors.primaryColor,
                   ),
                   const SizedBox(width: 8),
-                   Expanded(
+                  Expanded(
                     child: Text(
                       'Location captured',
                       style: TextStyle(
@@ -1085,9 +1102,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -1134,9 +1149,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -1174,9 +1187,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -1220,9 +1231,7 @@ class _ReportOtherChildScreenState
             margin: const EdgeInsets.all(10),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              gradient:  LinearGradient(
-                colors: AppColors.gradientColor,
-              ),
+              gradient: LinearGradient(colors: AppColors.gradientColor),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -1244,9 +1253,7 @@ class _ReportOtherChildScreenState
   Widget _buildSubmitButton(bool isSmallScreen) {
     return Container(
       decoration: BoxDecoration(
-        gradient:  LinearGradient(
-          colors: AppColors.gradientColor,
-        ),
+        gradient: LinearGradient(colors: AppColors.gradientColor),
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(

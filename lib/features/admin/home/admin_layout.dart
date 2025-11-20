@@ -15,7 +15,6 @@ class _ParentLayoutState extends ConsumerState<AdminLayout> {
   
   static final List<Widget> _screens = [
     AdminHomeScreen(),
-    const NotificationsScreen(),
     const ProfileScreen(),
   ];
 
@@ -35,10 +34,10 @@ class _ParentLayoutState extends ConsumerState<AdminLayout> {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: 'Notifications',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.notifications),
+          //   label: 'Notifications',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

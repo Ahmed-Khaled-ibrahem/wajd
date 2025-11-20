@@ -419,6 +419,7 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
           'latitude': _currentPosition!.latitude,
           'longitude': _currentPosition!.longitude,
           'accuracy': _currentPosition!.accuracy,
+          'backup_phone': user.userMetadata?['backupPhone'],
         },
       );
 

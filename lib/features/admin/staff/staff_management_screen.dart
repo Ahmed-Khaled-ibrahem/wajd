@@ -168,24 +168,24 @@ class _StaffManagementScreenState extends ConsumerState<StaffManagementScreen> {
                 }
               },
             ),
-            ListTile(
-              leading: const Icon(
-                Icons.person_remove_rounded,
-                color: Color(0xFFEF4444),
-              ),
-              title: const Text(
-                'Convert to Parent',
-                style: TextStyle(color: Color(0xFFEF4444)),
-              ),
-              subtitle: const Text(
-                'Remove staff privileges',
-                style: TextStyle(fontSize: 12),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                _showConvertToParentDialog(staff);
-              },
-            ),
+            // ListTile(
+            //   leading: const Icon(
+            //     Icons.person_remove_rounded,
+            //     color: Color(0xFFEF4444),
+            //   ),
+            //   title: const Text(
+            //     'Convert to Parent',
+            //     style: TextStyle(color: Color(0xFFEF4444)),
+            //   ),
+            //   subtitle: const Text(
+            //     'Remove staff privileges',
+            //     style: TextStyle(fontSize: 12),
+            //   ),
+            //   onTap: () {
+            //     Navigator.pop(context);
+            //     _showConvertToParentDialog(staff);
+            //   },
+            // ),
           ],
         ),
       ),

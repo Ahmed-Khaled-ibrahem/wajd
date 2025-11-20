@@ -81,7 +81,7 @@ class Child extends Equatable {
     String? name,
     int? age,
     String? gender,
-    String? bloodType,
+    // String? bloodType,
     String? medicalConditions,
     String? description,
     String? imageUrl,
