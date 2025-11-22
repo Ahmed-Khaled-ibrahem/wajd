@@ -449,9 +449,9 @@ class _ReportOtherChildScreenState
         // This is an unknown child
         createdAt: DateTime.now(),
         metadata: {
-          'latitude': _currentPosition!.latitude,
-          'longitude': _currentPosition!.longitude,
-          'accuracy': _currentPosition!.accuracy,
+          'latitude': _currentPosition?.latitude ,
+          'longitude': _currentPosition?.longitude,
+          'accuracy': _currentPosition?.accuracy,
           'reported_by_type': 'witness',
           'backup_phone': ref
               .read(currentUserProfileProvider)
