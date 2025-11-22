@@ -219,9 +219,9 @@ class _ReportOtherChildScreenState
     try {
       ProcessResult result = await Process.run('rpicam-jpeg', [
         '--output',
-        '/home/pi/Desktop/photo.jpg',
+        '/home/shiek/Desktop/photo.jpg',
       ]);
-      return '/home/pi/Desktop/photo.jpg';
+      return '/home/shiek/Desktop/photo.jpg';
     } catch (e) {
       print("Error taking photo: $e");
       return '';
