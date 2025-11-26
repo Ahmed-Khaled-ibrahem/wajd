@@ -31,6 +31,7 @@ class _ReportOtherChildScreenState
   final _additionalNotesController = TextEditingController();
   final _lastSeenLocationController = TextEditingController();
   final _reporterPhoneController = TextEditingController();
+  final _reporterBackUpPhoneController = TextEditingController();
   final _reporterEmailController = TextEditingController();
 
   String? _selectedGender;
@@ -55,6 +56,9 @@ class _ReportOtherChildScreenState
     if (user != null) {
       _reporterPhoneController.text = user.phone ?? '';
       _reporterEmailController.text = user.email ?? '';
+      _reporterBackUpPhoneController.text = ref
+          .read(currentUserProfileProvider)
+          ?.metadata?['backupPhone']?? '';
     }
   }
 
@@ -453,9 +457,7 @@ class _ReportOtherChildScreenState
           'longitude': _currentPosition?.longitude,
           'accuracy': _currentPosition?.accuracy,
           'reported_by_type': 'witness',
-          'backup_phone': ref
-              .read(currentUserProfileProvider)
-              ?.metadata?['backupPhone'],
+          'backup_phone': _reporterBackUpPhoneController.text.trim(),
         },
       );
 
@@ -635,6 +637,8 @@ class _ReportOtherChildScreenState
               _buildSectionHeader('Your Contact Information', isSmallScreen),
               const SizedBox(height: 16),
               _buildPhoneField(isSmallScreen, isDark),
+              const SizedBox(height: 16),
+              _buildBackUpPhoneField(isSmallScreen, isDark),
               const SizedBox(height: 16),
               _buildEmailField(isSmallScreen, isDark),
 
@@ -1292,6 +1296,44 @@ class _ReportOtherChildScreenState
                   ),
                 ],
               ),
+      ),
+    );
+  }
+
+  _buildBackUpPhoneField(bool isSmallScreen, bool isDark) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: AppColors.primaryColor.withOpacity(0.3),
+          width: 1.5,
+        ),
+      ),
+      child: TextFormField(
+        controller: _reporterPhoneController,
+        keyboardType: TextInputType.phone,
+        decoration: InputDecoration(
+          labelText: 'Backup Phone Number ',
+          hintText: 'Your contact number',
+          prefixIcon: Container(
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: AppColors.gradientColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(
+              Icons.phone_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 16,
+          ),
+        ),
       ),
     );
   }

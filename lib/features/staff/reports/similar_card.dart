@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:wajd/features/staff/reports/provider_similar.dart';
 import 'package:wajd/models/report_model.dart';
 import '../../../app/const/colors.dart';
+import '../../login/controller/current_profile_provider.dart';
 
 class SimilarReportsCard extends ConsumerWidget {
   final Report currentReport;
@@ -15,6 +16,7 @@ class SimilarReportsCard extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
+    final isParent = ref.read(currentUserProfileProvider)?.role.name == 'parent';
 
     // Get similar reports based on age (±2 years)
     final similarReportsAsync = ref.watch(
@@ -30,7 +32,7 @@ class SimilarReportsCard extends ConsumerWidget {
       loading: () => _buildLoadingSkeleton(isDark, isSmallScreen),
       error: (error, stack) => const SizedBox.shrink(),
       data: (similarReports) {
-        if (similarReports.isEmpty) {
+        if (similarReports.isEmpty || isParent) {
           return const SizedBox.shrink();
         }
 

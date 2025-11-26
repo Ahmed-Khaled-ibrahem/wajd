@@ -34,6 +34,7 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
   XFile? _pickedImage;
   bool _isSaving = false;
   final List<String> _identifyingFeatures = [];
+  final ImagePicker _picker = ImagePicker();
 
   final List<String> _bloodTypes = [
     'A+',
@@ -87,29 +88,55 @@ class _AddChildScreenState extends ConsumerState<AddChildScreen> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final imageFile = await CrossPlatformImagePicker.pickImage(context);
+  Future<String> takePiCameraPhoto() async {
+    try {
+      ProcessResult result = await Process.run('rpicam-jpeg', [
+        '--output',
+        '/home/shiek/Desktop/photo.jpg',
+      ]);
+      return '/home/shiek/Desktop/photo.jpg';
+    } catch (e) {
+      print("Error taking photo: $e");
+      return '';
+    }
+  }
 
-    if (imageFile != null) {
+  Future<void> _pickImage() async {
+    final source = await _showImageSourceDialog();
+    if (source == null) return;
+
+    if (source == ImageSource.camera && Platform.isLinux) {
+      final picture = await takePiCameraPhoto();
+      setState(() => _pickedImage = XFile(picture));
+      return;
+    }
+
+    final pickedFile = await _picker.pickImage(
+      source: source,
+      imageQuality: 80,
+      maxWidth: 1200,
+    );
+
+    if (pickedFile != null) {
       setState(() {
-        _pickedImage = imageFile as XFile?;
+        _pickedImage = pickedFile;
       });
     }
   }
 
-  Future<ImageSource?> _showImageSourceDialog() async {
+  Future<ImageSource?> _showImageSourceDialog() {
     return showDialog<ImageSource>(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Choose Image Source'),
+        title: const Text('Choose Photo Source'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildImageSourceOption(
               icon: Icons.camera_alt_rounded,
               title: 'Camera',
-              subtitle: 'Take a new photo',
+              subtitle: 'Take a photo',
               onTap: () => Navigator.pop(context, ImageSource.camera),
             ),
             const SizedBox(height: 12),

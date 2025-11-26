@@ -112,7 +112,7 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
       }
     } catch (e) {
       if (mounted) {
-        _showSnackBar('Error getting location: ${e.toString()}', isError: true);
+        // _showSnackBar('Error getting location: ${e.toString()}', isError: true);
       }
     } finally {
       if (mounted) {
@@ -371,13 +371,13 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
     //   return;
     // }
 
-    if (_currentPosition == null) {
-      _showSnackBar(
-        'Location is required. Please enable location services.',
-        isError: true,
-      );
-      return;
-    }
+    // if (_currentPosition == null) {
+    //   _showSnackBar(
+    //     'Location is required. Please enable location services.',
+    //     isError: true,
+    //   );
+    //   return;
+    // }
 
     setState(() => _isSubmitting = true);
 
@@ -416,9 +416,9 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
         isChildRegistered: true,
         createdAt: DateTime.now(),
         metadata: {
-          'latitude': _currentPosition!.latitude,
-          'longitude': _currentPosition!.longitude,
-          'accuracy': _currentPosition!.accuracy,
+          'latitude': _currentPosition?.latitude,
+          'longitude': _currentPosition?.longitude,
+          'accuracy': _currentPosition?.accuracy,
           'backup_phone': user.userMetadata?['backupPhone'],
         },
       );

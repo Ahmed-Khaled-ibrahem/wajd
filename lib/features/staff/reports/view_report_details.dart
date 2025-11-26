@@ -15,7 +15,6 @@ import '../../login/controller/current_profile_provider.dart';
 
 class ViewReportDetailsScreen extends ConsumerStatefulWidget {
   final String reportId;
-
   const ViewReportDetailsScreen({super.key, required this.reportId});
 
   @override
@@ -31,6 +30,7 @@ class _ViewReportDetailsScreenState
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
+    final isAdmin = ref.read(currentUserProfileProvider)?.role.name == 'admin';
 
     return Scaffold(
       backgroundColor: isDark
@@ -199,6 +199,7 @@ class _ViewReportDetailsScreenState
                     ),
                     const SizedBox(height: 16),
                   ],
+
                   _buildActionButtons(report, isDark, isSmallScreen),
                   const SizedBox(height: 5),
                   SimilarReportsCard(currentReport: report),
@@ -499,12 +500,13 @@ class _ViewReportDetailsScreenState
     final currentUser = ref.read(currentUserProvider);
     final currentUserData = ref.read(currentUserProfileProvider);
     final isAssignedToMe = report.assignedStaffId == currentUser?.id;
-    if (currentUserData?.role == UserRole.parent) {
+    final isAdmin = currentUserData?.role.name == 'admin';
+    if (currentUserData?.role == UserRole.parent ) {
       return Container();
     }
     return Column(
       children: [
-        if (!isAssignedToMe && report.assignedStaffId == null)
+        if (!isAssignedToMe && report.assignedStaffId == null && !isAdmin)
           SizedBox(
             width: double.infinity,
             height: isSmallScreen ? 48 : 52,

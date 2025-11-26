@@ -31,6 +31,7 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
   bool _isSaving = false;
   final List<String> _identifyingFeatures = [];
   String? _currentImageUrl;
+  final ImagePicker _picker = ImagePicker();
 
   // final List<String> _bloodTypes = [
   //   'A+',
@@ -104,21 +105,38 @@ class _EditChildScreenState extends ConsumerState<EditChildScreen> {
     }
   }
 
+  Future<String> takePiCameraPhoto() async {
+    try {
+      ProcessResult result = await Process.run('rpicam-jpeg', [
+        '--output',
+        '/home/shiek/Desktop/photo.jpg',
+      ]);
+      return '/home/shiek/Desktop/photo.jpg';
+    } catch (e) {
+      print("Error taking photo: $e");
+      return '';
+    }
+  }
+
   Future<void> _pickImage() async {
     final source = await _showImageSourceDialog();
     if (source == null) return;
 
-    final picker = ImagePicker();
-    final pickedImage = await picker.pickImage(
+    if (source == ImageSource.camera && Platform.isLinux) {
+      final picture = await takePiCameraPhoto();
+      setState(() => _pickedImage = XFile(picture));
+      return;
+    }
+
+    final pickedFile = await _picker.pickImage(
       source: source,
       imageQuality: 80,
-      maxWidth: 800,
+      maxWidth: 1200,
     );
 
-    if (pickedImage != null) {
+    if (pickedFile != null) {
       setState(() {
-        _pickedImage = pickedImage;
-        _currentImageUrl = null;
+        _pickedImage = pickedFile;
       });
     }
   }
