@@ -207,9 +207,28 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
     );
   }
 
+  Future<String> takePiCameraPhoto() async {
+    try {
+      ProcessResult result = await Process.run('rpicam-jpeg', [
+        '--output',
+        '/home/shiek/Desktop/photo.jpg',
+      ]);
+      return '/home/shiek/Desktop/photo.jpg';
+    } catch (e) {
+      print("Error taking photo: $e");
+      return '';
+    }
+  }
+
   Future<void> _pickImage() async {
     final source = await _showImageSourceDialog();
     if (source == null) return;
+
+    if (source == ImageSource.camera && Platform.isLinux) {
+      final picture = await takePiCameraPhoto();
+      setState(() => _recentPhoto = XFile(picture));
+      return;
+    }
 
     final pickedFile = await _picker.pickImage(
       source: source,
@@ -608,7 +627,10 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton.icon(
-                      onPressed: () => context.push('/add-child'),
+                      onPressed: () {
+                        context.pop();
+                        context.push('/add-child');
+                      },
                       icon: const Icon(Icons.add_rounded),
                       label: const Text('Add Child'),
                       style: ElevatedButton.styleFrom(

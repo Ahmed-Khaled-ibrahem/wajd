@@ -54,7 +54,7 @@ class _ReportOtherChildScreenState
   Future<void> _loadUserInfo() async {
     final user = ref.read(currentUserProvider);
     if (user != null) {
-      _reporterPhoneController.text = user.phone ?? '';
+      _reporterPhoneController.text = ref.read(currentUserProfileProvider)?.phoneNumber?? '';
       _reporterEmailController.text = user.email ?? '';
       _reporterBackUpPhoneController.text = ref
           .read(currentUserProfileProvider)
@@ -70,6 +70,7 @@ class _ReportOtherChildScreenState
     _additionalNotesController.dispose();
     _lastSeenLocationController.dispose();
     _reporterPhoneController.dispose();
+    _reporterBackUpPhoneController.dispose();
     _reporterEmailController.dispose();
     super.dispose();
   }
@@ -1310,7 +1311,7 @@ class _ReportOtherChildScreenState
         ),
       ),
       child: TextFormField(
-        controller: _reporterPhoneController,
+        controller: _reporterBackUpPhoneController,
         keyboardType: TextInputType.phone,
         decoration: InputDecoration(
           labelText: 'Backup Phone Number ',
