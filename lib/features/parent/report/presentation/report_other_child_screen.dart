@@ -414,10 +414,11 @@ class _ReportOtherChildScreenState
     setState(() => _isSubmitting = true);
 
     try {
-      final user = ref.read(currentUserProvider);
-      if (user == null) throw Exception('User not logged in');
+      // final user = ref.read(currentUserProvider);
+      // if (user == null) throw Exception('User not logged in');
 
       final reportId = const Uuid().v4();
+      final reporterId = const Uuid().v4();
 
       // Upload child photo
       String? imageUrl;
@@ -430,7 +431,7 @@ class _ReportOtherChildScreenState
       // Create report for unknown child
       final report = Report(
         id: reportId,
-        reporterId: user.id,
+        reporterId: reporterId,
         childId: null,
         // No child ID for unknown children
         status: ReportStatus.open,

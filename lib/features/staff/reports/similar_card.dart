@@ -628,7 +628,7 @@ class SimilarReportsCard extends ConsumerWidget {
 
                       // Message
                       Text(
-                        'If you think this might be your child, please contact our staff team immediately for assistance.',
+                        'Is this the child you are searching for?',
                         style: TextStyle(
                           fontSize: 14,
                           color: isDark
