@@ -617,7 +617,7 @@ class SimilarReportsCard extends ConsumerWidget {
 
                       // Title
                       const Text(
-                        'Is This Your Child?',
+                        'Is This the Child?',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -701,7 +701,7 @@ class SimilarReportsCard extends ConsumerWidget {
                             _contactStaff(context, report);
                           },
                           icon: const Icon(Icons.support_agent_rounded),
-                          label: const Text('Contact Staff Now'),
+                          label: const Text('Contact Now'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF10B981),
                             foregroundColor: Colors.white,
