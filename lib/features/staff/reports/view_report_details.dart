@@ -15,6 +15,7 @@ import '../../login/controller/current_profile_provider.dart';
 
 class ViewReportDetailsScreen extends ConsumerStatefulWidget {
   final String reportId;
+
   const ViewReportDetailsScreen({super.key, required this.reportId});
 
   @override
@@ -201,7 +202,42 @@ class _ViewReportDetailsScreenState
                   ],
 
                   _buildActionButtons(report, isDark, isSmallScreen),
-                  const SizedBox(height: 5),
+                  Builder(
+                    builder: (context) {
+                      final isAdmin =
+                          ref.read(currentUserProfileProvider)?.role.name ==
+                          'admin';
+                      if (isAdmin) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            context
+                                .push('/assign-to-staff', extra: widget.reportId)
+                                .then((value) {
+                              if (value == true) {
+                                ref.invalidate(reportByIdProvider(widget.reportId));
+                              }
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 0,
+                            side: const BorderSide(color: Color(0xFF1F2937)),
+                            backgroundColor: isDark
+                                ? const Color(0xFF1F2937)
+                                : Colors.white,
+                            foregroundColor: isDark
+                                ? Colors.white
+                                : const Color(0xFF1F2937),
+                          ),
+                          child: Text('Assign to staff'),
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
+                  const SizedBox(height: 15),
                   SimilarReportsCard(currentReport: report),
                 ]),
           ),
@@ -501,7 +537,7 @@ class _ViewReportDetailsScreenState
     final currentUserData = ref.read(currentUserProfileProvider);
     final isAssignedToMe = report.assignedStaffId == currentUser?.id;
     final isAdmin = currentUserData?.role.name == 'admin';
-    if (currentUserData?.role == UserRole.parent ) {
+    if (currentUserData?.role == UserRole.parent) {
       return Container();
     }
     return Column(
@@ -686,10 +722,36 @@ class _ViewReportDetailsScreenState
           .read(reportsProvider.notifier)
           .assignReportToStaff(report.id, currentUser.id);
       ref.invalidate(reportByIdProvider(widget.reportId));
+      // if (mounted) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text('Report assigned to you successfully'),
+      //       backgroundColor: AppColors.primaryColor,
+      //     ),
+      //   );
+      // }
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Report assigned to you successfully'),
+            content: Text('Failed to assign report: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
+        );
+      }
+    }
+  }
+
+  void _assignReportToStaff(Report report, String staffId) {
+    try {
+      ref
+          .read(reportsProvider.notifier)
+          .assignReportToStaff(report.id, staffId);
+      ref.invalidate(reportByIdProvider(widget.reportId));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Report assigned to $staffId successfully'),
             backgroundColor: AppColors.primaryColor,
           ),
         );

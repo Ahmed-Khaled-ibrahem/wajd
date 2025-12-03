@@ -18,6 +18,7 @@ import '../../features/profile/presentation/feedbacks_screen.dart';
 import '../../features/profile/presentation/help_and_support_screen.dart';
 import '../../features/splash/splash_screen.dart';
 import '../../features/staff/home/staff_layout.dart';
+import '../../features/staff/reports/assign_to_staff_list_screen.dart';
 import '../../features/staff/reports/reports_screen.dart';
 import '../../features/staff/reports/view_report_details.dart';
 import '../../models/child_model.dart';
@@ -121,6 +122,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/add-child',
             builder: (context, state) => const AddChildScreen(),
+          ),
+          GoRoute(
+            path: '/assign-to-staff',
+            builder: (context, state) => AssignToStaffListScreen(
+              reportId: state.extra as String,
+            ),
           ),
           GoRoute(
             path: '/edit-child',
