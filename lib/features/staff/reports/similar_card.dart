@@ -143,7 +143,7 @@ class SimilarReportsCard extends ConsumerWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  '$count children with similar age',
+                  '$count children with similar age and gender',
                   style: TextStyle(
                     color: Colors.white.withOpacity(0.9),
                     fontSize: isSmallScreen ? 12 : 13,

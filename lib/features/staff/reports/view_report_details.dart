@@ -253,7 +253,18 @@ class _ViewReportDetailsScreenState
                     },
                   ),
                   const SizedBox(height: 15),
-                  SimilarReportsCard(currentReport: report),
+                  Builder(
+                    builder: (context) {
+                      final isAdmin =
+                          ref.read(currentUserProfileProvider)?.role.name ==
+                              'admin';
+
+                      if(isAdmin){
+                        return SizedBox();
+                      }
+                      return SimilarReportsCard(currentReport: report);
+                    }
+                  ),
                 ]),
           ),
         ),
