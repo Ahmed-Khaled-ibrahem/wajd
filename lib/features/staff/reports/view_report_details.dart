@@ -201,7 +201,17 @@ class _ViewReportDetailsScreenState
                     const SizedBox(height: 16),
                   ],
 
-                  _buildActionButtons(report, isDark, isSmallScreen),
+                  Builder(
+                    builder: (context) {
+                      final isAdmin =
+                          ref.read(currentUserProfileProvider)?.role.name ==
+                          'admin';
+                      if (isAdmin) {
+                        return SizedBox();
+                      }
+                      return _buildActionButtons(report, isDark, isSmallScreen);
+                    },
+                  ),
                   Builder(
                     builder: (context) {
                       final isAdmin =
@@ -211,12 +221,17 @@ class _ViewReportDetailsScreenState
                         return ElevatedButton(
                           onPressed: () {
                             context
-                                .push('/assign-to-staff', extra: widget.reportId)
+                                .push(
+                                  '/assign-to-staff',
+                                  extra: widget.reportId,
+                                )
                                 .then((value) {
-                              if (value == true) {
-                                ref.invalidate(reportByIdProvider(widget.reportId));
-                              }
-                            });
+                                  if (value == true) {
+                                    ref.invalidate(
+                                      reportByIdProvider(widget.reportId),
+                                    );
+                                  }
+                                });
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

@@ -23,6 +23,7 @@ class SimilarReportsCard extends ConsumerWidget {
       similarReportsByAgeProvider(
         SimilarReportsParams(
           age: currentReport.childAge,
+          gender : currentReport.childGender,
           excludeId: currentReport.id,
         ),
       ),
@@ -924,12 +925,11 @@ class SimilarReportsCard extends ConsumerWidget {
               'You can contact our staff team through:',
               style: TextStyle(fontSize: 14),
             ),
-
             const SizedBox(height: 12),
             _buildContactOption(
               Icons.phone_rounded,
               'Phone',
-              'not found',
+              report.reporterPhone,
               const Color(0xFFEF4444),
             ),
             const SizedBox(height: 16),
