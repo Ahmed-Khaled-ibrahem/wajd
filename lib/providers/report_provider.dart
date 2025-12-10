@@ -333,6 +333,7 @@ final reportByIdProvider = FutureProvider.family<Report?, String>((
 
 final reportStatisticsProvider = FutureProvider<ReportStatistics>((ref) async {
   final client = ref.watch(supabaseClientProvider);
+  ref.watch(allReportsProvider);
 
   try {
     final totalReports = await client

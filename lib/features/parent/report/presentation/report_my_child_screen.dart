@@ -12,10 +12,10 @@ import 'package:wajd/services/supabase_cleint.dart';
 import '../../../../app/const/colors.dart';
 import '../../../../providers/cheldren_provider.dart';
 import '../../../../providers/report_provider.dart';
+import '../../../login/controller/current_profile_provider.dart';
 
 class ReportMyChildScreen extends ConsumerStatefulWidget {
   const ReportMyChildScreen({super.key});
-
   @override
   ConsumerState<ReportMyChildScreen> createState() =>
       _ReportMyChildScreenState();
@@ -402,6 +402,7 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
 
     try {
       final user = ref.read(currentUserProvider);
+      final profile = ref.read(currentUserProfileProvider);
       if (user == null) throw Exception('User not logged in');
 
       final reportId = const Uuid().v4();
@@ -427,7 +428,7 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
         lastSeenLocation: _lastSeenLocationController.text.trim(),
         lastSeenTime: _lastSeenTime,
         childImageUrl: imageUrl ?? _selectedChild!.imageUrl,
-        reporterPhone: user.phone ?? '',
+        reporterPhone: profile?.phoneNumber ?? '',
         reporterEmail: user.email,
         additionalNotes: _additionalNotesController.text.trim().isNotEmpty
             ? _additionalNotesController.text.trim()
@@ -438,7 +439,7 @@ class _ReportMyChildScreenState extends ConsumerState<ReportMyChildScreen> {
           'latitude': _currentPosition?.latitude,
           'longitude': _currentPosition?.longitude,
           'accuracy': _currentPosition?.accuracy,
-          'backup_phone': user.userMetadata?['backupPhone'],
+          'backup_phone': profile?.metadata?['backupPhone'],
         },
       );
 

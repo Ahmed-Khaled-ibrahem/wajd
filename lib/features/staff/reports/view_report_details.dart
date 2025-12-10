@@ -15,9 +15,7 @@ import '../../login/controller/current_profile_provider.dart';
 
 class ViewReportDetailsScreen extends ConsumerStatefulWidget {
   final String reportId;
-
   const ViewReportDetailsScreen({super.key, required this.reportId});
-
   @override
   ConsumerState<ViewReportDetailsScreen> createState() =>
       _ViewReportDetailsScreenState();

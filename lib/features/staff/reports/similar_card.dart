@@ -914,7 +914,7 @@ class SimilarReportsCard extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 12),
-            const Expanded(child: Text('Contact Staff')),
+            const Expanded(child: Text('Contact reporter')),
           ],
         ),
         content: Column(
@@ -922,7 +922,7 @@ class SimilarReportsCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'You can contact our staff team through:',
+              'You can contact the reporter through:',
               style: TextStyle(fontSize: 14),
             ),
             const SizedBox(height: 12),
